@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASSHINE — Lavadero Inteligente</title>
+<link rel="icon" href="images/logo-jasshine.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brand">
+      <img src="images/logo-jasshine.png" alt="JASSHINE">
+      <span>JASSHINE</span>
+    </div>
+    <div class="nav-links">
+      <a href="#inicio">Lavadero inteligente</a>
+      <a href="#servicios">Agenda en línea</a>
+      <a href="#">Notificaciones</a>
+      <a href="#">Facturación digital</a>
+      <a href="#">Gestión de empleados</a>
+    </div>
+    <div class="nav-actions">
+      <a href="views/auth/login.html" class="btn">Iniciar sesión</a>
+      <a href="views/auth/registro.html" class="btn btn-primary">Registrarse</a>
+    </div>
+  </nav>
+</header>
+
+<main id="inicio">
+  <!-- HERO -->
+  <section class="hero" style="padding-top:70px;">
+    <div class="hero-inner">
+      <img class="hero-logo" src="images/logo-jasshine.png" alt="JASSHINE — Lavado de motos">
+      <div class="eyebrow">● Agenda abierta hoy</div>
+      <h1>JASS<span>HINE</span></h1>
+      <div class="tagline">Porque cada minuto y cada moto cuentan.</div>
+      <p class="lede">
+        Somos un lavadero inteligente especializado en motocicletas. Agenda tu lavada en línea,
+        elige a tu lavador de confianza y sigue el estado de tu moto en tiempo real, sin filas
+        ni sorpresas.
+      </p>
+      <div class="hero-actions">
+        <a href="#servicios" class="btn btn-primary btn-lg">Agendar mi lavada</a>
+        <a href="#nosotros" class="btn btn-lg">Conócenos</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STRIP -->
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="strip-item"><b>+300</b><span>Motos lavadas al mes</span></div>
+      <div class="strip-item"><b>4.9★</b><span>Calificación promedio</span></div>
+      <div class="strip-item"><b>20&nbsp;min</b><span>Lavado básico</span></div>
+      <div class="strip-item"><b>6</b><span>Lavadores certificados</span></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="nosotros">
+    <div class="about-grid">
+      <div class="about-copy">
+        <div class="section-head" style="text-align:left; margin:0 0 22px;">
+          <div class="kicker">SOBRE NOSOTROS</div>
+          <h2>Un lavadero pensado para motociclistas</h2>
+        </div>
+        <p>
+          En JASSHINE entendemos que tu moto no es solo un vehículo, es tu forma de moverte por
+          la ciudad. Por eso creamos un lavadero inteligente donde puedes agendar tu cita en
+          línea, elegir el tipo de lavado que necesitas y llevar el control de tus servicios
+          desde un solo lugar.
+        </p>
+        <p>
+          Nuestro equipo de lavadores certificados cuida cada pieza de tu moto con productos
+          especializados, mientras tú ahorras tiempo agendando todo desde tu celular.
+        </p>
+        <div class="quote">"Porque cada minuto y cada moto cuentan."</div>
+      </div>
+      <div class="about-card">
+        <div class="cell"><div class="ic">⏱️</div><b>Agenda en línea</b><span>Reserva tu horario en segundos</span></div>
+        <div class="cell"><div class="ic">🧽</div><b>Lavado experto</b><span>Personal certificado y detallado</span></div>
+        <div class="cell"><div class="ic">🧾</div><b>Facturación digital</b><span>Recibos y comprobantes al instante</span></div>
+        <div class="cell"><div class="ic">🔔</div><b>Notificaciones</b><span>Sigue el estado de tu moto en vivo</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="servicios">
+    <div class="section-head">
+      <div class="kicker">NUESTROS SERVICIOS</div>
+      <h2>Elige el lavado ideal para tu moto</h2>
+      <p>Precios claros, sin costos ocultos. Agenda el que mejor se ajuste a tu rutina.</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card">
+        <div class="ic">🏍️</div>
+        <b>Lavado básico</b>
+        <div class="desc">Exterior completo · 20 min</div>
+        <div class="price">$8.000</div>
+      </div>
+      <div class="service-card">
+        <div class="ic">💧</div>
+        <b>Lavado completo</b>
+        <div class="desc">Exterior + interior · 35 min</div>
+        <div class="price">$15.000</div>
+      </div>
+      <div class="service-card">
+        <div class="ic">✨</div>
+        <b>Lavado + Pulido</b>
+        <div class="desc">Brillo de todas las piezas · 55 min</div>
+        <div class="price">$22.000</div>
+      </div>
+      <div class="service-card">
+        <div class="ic">🏆</div>
+        <b>Lavado Full</b>
+        <div class="desc">Interior, exterior y pulida · 70 min</div>
+        <div class="price">$25.000</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-inner">
+      <h2>Tu moto se merece un lavado a su altura</h2>
+      <p>Crea tu cuenta gratis y agenda tu primer servicio en menos de un minuto.</p>
+      <a href="views/auth/registro.html" class="btn btn-primary btn-lg">Crear cuenta gratis</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <img src="images/logo-jasshine.png" alt="JASSHINE">
+      <span>JASSHINE</span>
+    </div>
+    <div class="muted">© 2026 JASSHINE — Lavadero Inteligente. Porque cada minuto y cada moto cuentan.</div>
+  </div>
+</footer>
+
+</body>
+</html>

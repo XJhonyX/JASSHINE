@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASSHINE — Recuperar contraseña</title>
+<link rel="icon" href="../../images/logo-jasshine.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/recuperar.css">
+</head>
+<body>
+
+<div class="split">
+  <!-- LADO IZQUIERDO -->
+  <div class="side">
+    <a class="brand" href="../../index.html">
+      <img src="../../images/logo-jasshine.png" alt="JASSHINE">
+      <span>JASSHINE</span>
+    </a>
+    <div class="side-copy">
+      <h1>JASS<span>HINE</span></h1>
+      <div class="side-sub">LAVADERO INTELIGENTE</div>
+      <p>Porque cada minuto<br>y cada moto cuentan.</p>
+      <div class="side-line"></div>
+    </div>
+  </div>
+
+  <!-- LADO DERECHO -->
+  <div class="side form-side">
+    <div class="form-card" id="step-request">
+      <div class="steps">
+        <div class="step active" data-step="1"><span>1</span></div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2"><span>2</span></div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3"><span>3</span></div>
+      </div>
+
+      <h2>¿Olvidaste la contraseña?</h2>
+      <p class="form-sub">Ingresa tu correo y te enviaremos un código de verificación</p>
+
+      <form id="request-form">
+        <label>Correo electrónico</label>
+        <div class="input-wrap">
+          <input type="email" id="email" placeholder="correo@ejemplo.com" required>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Enviar código</button>
+      </form>
+
+      <div class="signup-note"><a href="login.html">← Volver a iniciar sesión</a></div>
+    </div>
+
+    <!-- Paso 2: código -->
+    <div class="form-card hidden" id="step-code">
+      <div class="steps">
+        <div class="step done" data-step="1"><span>✓</span></div>
+        <div class="step-line done"></div>
+        <div class="step active" data-step="2"><span>2</span></div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3"><span>3</span></div>
+      </div>
+
+      <h2>Revisa tu correo</h2>
+      <p class="form-sub">Enviamos un código de 6 dígitos a <span id="sent-email">tu correo</span></p>
+
+      <form id="code-form">
+        <div class="code-inputs">
+          <input maxlength="1" class="code-digit" required>
+          <input maxlength="1" class="code-digit" required>
+          <input maxlength="1" class="code-digit" required>
+          <input maxlength="1" class="code-digit" required>
+          <input maxlength="1" class="code-digit" required>
+          <input maxlength="1" class="code-digit" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Verificar código</button>
+      </form>
+
+      <div class="signup-note">¿No te llegó? <a href="#" id="resend">Reenviar código</a></div>
+    </div>
+
+    <!-- Paso 3: nueva contraseña -->
+    <div class="form-card hidden" id="step-reset">
+      <div class="steps">
+        <div class="step done" data-step="1"><span>✓</span></div>
+        <div class="step-line done"></div>
+        <div class="step done" data-step="2"><span>✓</span></div>
+        <div class="step-line done"></div>
+        <div class="step active" data-step="3"><span>3</span></div>
+      </div>
+
+      <h2>Crea una nueva contraseña</h2>
+      <p class="form-sub">Debe tener al menos 8 caracteres</p>
+
+      <form id="reset-form">
+        <label>Nueva contraseña</label>
+        <div class="input-wrap">
+          <input type="password" id="new-password" placeholder="••••••••" minlength="8" required>
+          <svg class="eye toggle-pass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <label>Confirmar contraseña</label>
+        <div class="input-wrap">
+          <input type="password" id="confirm-password" placeholder="••••••••" minlength="8" required>
+          <svg class="eye toggle-pass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <p class="error-msg hidden" id="error-msg">Las contraseñas no coinciden.</p>
+        <button type="submit" class="btn btn-primary btn-block">Guardar contraseña</button>
+      </form>
+    </div>
+
+    <!-- Confirmación final -->
+    <div class="form-card hidden" id="step-done">
+      <div class="done-icon">✓</div>
+      <h2 style="text-align:center;">¡Contraseña actualizada!</h2>
+      <p class="form-sub" style="text-align:center;">Ya puedes iniciar sesión con tu nueva contraseña.</p>
+      <a href="login.html" class="btn btn-primary btn-block">Ir a iniciar sesión</a>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/recuperar.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASSHINE — Crear cuenta</title>
+<link rel="icon" href="../../images/logo-jasshine.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../css/registro.css">
+</head>
+<body>
+
+<div class="split">
+  <!-- LADO IZQUIERDO -->
+  <div class="side">
+    <a class="brand" href="../../index.html">
+      <img src="../../images/logo-jasshine.png" alt="JASSHINE">
+      <span>JASSHINE</span>
+    </a>
+    <div class="side-copy">
+      <div class="side-sub">ÚNETE A</div>
+      <h1>JASS<span>HINE</span></h1>
+      <p>Crea tu cuenta y disfruta de la mejor<br>experiencia para tu moto.</p>
+      <div class="side-line"></div>
+    </div>
+  </div>
+
+  <!-- LADO DERECHO -->
+  <div class="side form-side">
+    <div class="form-card">
+      <h2>Crear cuenta</h2>
+      <p class="form-sub">Regístrate para agendar tu primer lavado</p>
+
+      <form id="signup-form">
+        <label>Nombre completo</label>
+        <div class="input-wrap">
+          <input type="text" id="name" placeholder="Ingresa tu nombre completo" required>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
+        </div>
+
+        <label>Correo electrónico</label>
+        <div class="input-wrap">
+          <input type="email" id="email" placeholder="correo@ejemplo.com" required>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+        </div>
+
+        <label>Contraseña</label>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="••••••••" required>
+          <svg id="toggle-pass" class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Crear cuenta</button>
+      </form>
+
+      <div class="signup-note">¿Ya tienes cuenta? <a href="login.html">Iniciar sesión</a></div>
+    </div>
+  </div>
+</div>
+
+<script src="../../js/registro.js"></script>
+</body>
+</html>

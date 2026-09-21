@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
+<link rel="stylesheet" href="../../css/responsive.css">
 </head>
 <body>
 
@@ -69,6 +70,9 @@
 
 <div class="main">
   <div class="topbar">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
     <div><div class="page-title">Comisiones</div><div class="page-sub">Seguimiento de pagos por empleado</div></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
@@ -107,7 +111,7 @@
             <button class="btn btn-sm">Exportar</button>
           </div>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th>Empleado</th><th>Lavadas</th><th>% comisión</th><th>Total generado</th><th>Estado de pago</th></tr></thead>
           <tbody>
             <tr><td><div class="person"><div class="person-avatar">JE</div>Juan Esteban</div></td><td>142</td><td>18%</td><td>$429.000</td><td><span class="badge green">Pagado</span></td></tr>
@@ -116,7 +120,7 @@
             <tr><td><div class="person"><div class="person-avatar">DA</div>David Andrade</div></td><td>71</td><td>15%</td><td>$145.000</td><td><span class="badge orange">Pendiente</span></td></tr>
             <tr><td><div class="person"><div class="person-avatar">CR</div>Camila Rojas</div></td><td>38</td><td>15%</td><td>$69.000</td><td><span class="badge green">Pagado</span></td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </section>
   </div>

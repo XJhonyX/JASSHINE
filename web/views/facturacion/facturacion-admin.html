@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
+<link rel="stylesheet" href="../../css/responsive.css">
 </head>
 <body>
 
@@ -69,6 +70,9 @@
 
 <div class="main">
   <div class="topbar">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
     <div><div class="page-title">Facturación</div><div class="page-sub">Recibos e ingresos del negocio</div></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
@@ -91,7 +95,7 @@
           <h3>RECIBOS RECIENTES</h3>
           <div class="filters"><div class="select">Todos ▾</div><button class="btn btn-sm">Exportar</button></div>
         </div>
-        <table>
+        <div class="table-scroll"><table>
           <thead><tr><th>Recibo</th><th>Cliente</th><th>Servicio</th><th>Fecha</th><th>Total</th><th>Estado</th></tr></thead>
           <tbody>
             <tr><td>#1042</td><td>Juan Esteban G.</td><td>Lavado completo</td><td>25 May, 3:00 PM</td><td>$15.000</td><td><span class="badge green">Pagado</span></td></tr>
@@ -100,7 +104,7 @@
             <tr><td>#1039</td><td>Camilo Duarte</td><td>Lavado + Pulido</td><td>24 May, 4:40 PM</td><td>$22.000</td><td><span class="badge green">Pagado</span></td></tr>
             <tr><td>#1038</td><td>Sara Molano</td><td>Lavado básico</td><td>24 May, 2:05 PM</td><td>$8.000</td><td><span class="badge red">Anulado</span></td></tr>
           </tbody>
-        </table>
+        </table></div>
       </div>
     </section>
   </div>

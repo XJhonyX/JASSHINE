@@ -93,3 +93,11 @@ form label:first-of-type{margin-top:0;}
   .side:first-child{display:none;}
   .side{padding:32px 24px;}
 }
+
+@media (max-width:420px){
+  .side{padding:24px 18px;}
+  .form-card{max-width:100%;}
+  .role-group{grid-template-columns:repeat(3, 1fr); gap:6px;}
+  .role-btn{padding:10px 4px; font-size:11px;}
+  .role-btn svg{width:15px; height:15px;}
+}

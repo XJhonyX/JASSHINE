@@ -36,6 +36,42 @@ function runPageScripts(doc) {
   });
 }
 
+// ---------- Menú móvil (sidebar tipo cajón en pantallas angostas) ----------
+// El botón #menu-toggle vive DENTRO de .topbar, y .topbar se reemplaza en
+// cada cambio de sección (ver arriba), así que el listener del botón usa
+// delegación de eventos sobre document en vez de engancharse al botón
+// directamente — así sigue funcionando después de cada swap.
+
+function ensureBackdrop() {
+  let bd = document.querySelector('.sidebar-backdrop');
+  if (!bd) {
+    bd = document.createElement('div');
+    bd.className = 'sidebar-backdrop';
+    document.body.appendChild(bd);
+    bd.addEventListener('click', closeSidebar);
+  }
+  return bd;
+}
+function openSidebar() {
+  document.querySelector('.sidebar')?.classList.add('open');
+  ensureBackdrop().classList.add('show');
+}
+function closeSidebar() {
+  document.querySelector('.sidebar')?.classList.remove('open');
+  document.querySelector('.sidebar-backdrop')?.classList.remove('show');
+}
+document.addEventListener('click', (e) => {
+  if (e.target.closest('#menu-toggle')) {
+    e.preventDefault();
+    const sidebar = document.querySelector('.sidebar');
+    if (sidebar && sidebar.classList.contains('open')) closeSidebar();
+    else openSidebar();
+  }
+});
+window.addEventListener('resize', () => {
+  if (window.innerWidth > 880) closeSidebar();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const links = document.querySelectorAll('.sidebar .nav-item[href]');
 
@@ -46,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     link.addEventListener('click', async (e) => {
       e.preventDefault();
+      closeSidebar();
       try {
         const res = await fetch(href);
         if (!res.ok) throw new Error('No se pudo cargar ' + href);

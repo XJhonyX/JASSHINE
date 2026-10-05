@@ -46,8 +46,8 @@ function renderUsuarios() {
         <td>${u.email}</td>
         <td><span class="badge ${estadoInfo.cls}">${estadoInfo.label}</span></td>
         <td><div class="row-actions">
-          <button class="icon-btn" data-edit="${u.id}" title="Editar">✎</button>
-          <button class="icon-btn" data-delete="${u.id}" title="Eliminar">${ICON_TRASH}</button>
+          <button class="icon-btn" data-edit="${u.id}" title="Editar" aria-label="Editar usuario ${u.nombre}">✎</button>
+          <button class="icon-btn" data-delete="${u.id}" title="Eliminar" aria-label="Eliminar usuario ${u.nombre}">${ICON_TRASH}</button>
         </div></td>
       </tr>`;
   }).join('');

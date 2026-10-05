@@ -25,7 +25,7 @@ function renderMisCitas() {
           <div class="person-sub">${r.placa} · ${tipo ? '$' + tipo.precio.toLocaleString('es-CO') : ''}</div>
         </div>
         <span class="badge ${badgeCls}">${r.estado}</span>
-        ${puedeCancel ? `<button class="icon-btn" data-cancel="${r.id}" title="Cancelar cita" style="margin-left:10px;">${ICON_TRASH}</button>` : ''}
+        ${puedeCancel ? `<button class="icon-btn" data-cancel="${r.id}" title="Cancelar cita" aria-label="Cancelar cita" style="margin-left:10px;">${ICON_TRASH}</button>` : ''}
       </div>`;
   }).join('');
 

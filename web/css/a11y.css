@@ -1,0 +1,54 @@
+/* JASSHINE — Accesibilidad compartida (se carga en todas las páginas) */
+
+/* Texto solo para lectores de pantalla */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
+
+/* Enlace "Saltar al contenido" — oculto hasta que recibe foco por teclado */
+.skip-link{
+  position:absolute; left:12px; top:-60px; z-index:1000;
+  background:var(--accent); color:#fff; font-weight:700; font-size:13.5px;
+  padding:10px 16px; border-radius:8px; text-decoration:none;
+  transition:top .15s;
+}
+.skip-link:focus{top:12px;}
+
+/* Foco visible fuerte y consistente en todo elemento interactivo.
+   Varios componentes ponen outline:none en el input y solo cambian el
+   borde — eso no basta como indicador de foco, así que reforzamos con
+   un anillo exterior en :focus-visible (no aparece en clic de mouse). */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible,
+.nav-item:focus-visible,
+.tipo-card:focus-visible,
+.staff-card:focus-visible,
+.role-btn:focus-visible,
+.icon-btn:focus-visible,
+.toggle:focus-visible{
+  outline:2px solid var(--accent-2, #4f8dfb);
+  outline-offset:2px;
+  border-radius:6px;
+}
+
+/* Switch accesible (Configuración): botón real con role="switch" */
+button.toggle{
+  padding:0; border:1px solid var(--border); appearance:none;
+  -webkit-appearance:none;
+}
+button.toggle:focus-visible{outline-offset:3px;}
+
+/* Respeta la preferencia del sistema de reducir animaciones */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration:0.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:0.001ms !important;
+    scroll-behavior:auto !important;
+  }
+}

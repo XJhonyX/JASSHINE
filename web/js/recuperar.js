@@ -64,9 +64,12 @@ resetForm.addEventListener('submit', (e) => {
 });
 
 // Mostrar/ocultar contraseña
-document.querySelectorAll('.toggle-pass').forEach((icon) => {
-  icon.addEventListener('click', () => {
-    const input = icon.previousElementSibling;
-    input.type = input.type === 'password' ? 'text' : 'password';
+document.querySelectorAll('.toggle-pass').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const input = btn.previousElementSibling;
+    const showing = input.type === 'password';
+    input.type = showing ? 'text' : 'password';
+    btn.setAttribute('aria-label', showing ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    btn.setAttribute('aria-pressed', String(showing));
   });
 });

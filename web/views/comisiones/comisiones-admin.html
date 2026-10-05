@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -33,7 +35,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M6.5 16c.5-1.5 1.8-2.5 2.5-2.5s2 1 2.5 2.5"/><path d="M15 8h4M15 12h4M15 16h2"/></svg>
       Gestión de usuarios
     </a>
-    <a class="nav-item active" href="../comisiones/comisiones-admin.html">
+    <a class="nav-item active" aria-current="page" href="../comisiones/comisiones-admin.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9.5a2.5 2.5 0 0 1 2.5-2.5h1a2.5 2.5 0 0 1 0 5h-1a2.5 2.5 0 0 0 0 5h1a2.5 2.5 0 0 0 2.5-2.5"/></svg>
       Comisiones
     </a>
@@ -69,11 +71,11 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Comisiones</div><div class="page-sub">Seguimiento de pagos por empleado</div></div>
+    <div><h1 class="page-title">Comisiones</h1><p class="page-sub">Seguimiento de pagos por empleado</p></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
         <div class="profile-name">Admin</div>
@@ -81,9 +83,9 @@
       </div>
       <div class="avatar">A</div>
     </div>
-  </div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="stat-row" style="grid-template-columns:repeat(3,1fr);">
         <div class="stat-card">
@@ -112,7 +114,7 @@
           </div>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Empleado</th><th>Lavadas</th><th>% comisión</th><th>Total generado</th><th>Estado de pago</th></tr></thead>
+          <thead><tr><th scope="col">Empleado</th><th scope="col">Lavadas</th><th scope="col">% comisión</th><th scope="col">Total generado</th><th scope="col">Estado de pago</th></tr></thead>
           <tbody>
             <tr><td><div class="person"><div class="person-avatar">JE</div>Juan Esteban</div></td><td>142</td><td>18%</td><td>$429.000</td><td><span class="badge green">Pagado</span></td></tr>
             <tr><td><div class="person"><div class="person-avatar">MA</div>Maria Alejandra</div></td><td>118</td><td>18%</td><td>$356.000</td><td><span class="badge green">Pagado</span></td></tr>
@@ -123,7 +125,7 @@
         </table></div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

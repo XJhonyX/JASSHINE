@@ -9,8 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/login.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
 <div class="split">
   <!-- LADO IZQUIERDO -->
@@ -28,22 +30,24 @@
   </div>
 
   <!-- LADO DERECHO -->
-  <div class="side form-side">
+  <main class="side form-side" id="main-content" tabindex="-1">
     <div class="form-card">
       <h2>Bienvenido de nuevo</h2>
       <p class="form-sub">Ingresa tus credenciales para continuar</p>
 
       <form id="login-form">
-        <label>Correo electrónico</label>
+        <label for="email">Correo electrónico</label>
         <div class="input-wrap">
           <input type="email" id="email" placeholder="correo@ejemplo.com" required>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
         </div>
 
-        <label>Contraseña</label>
+        <label for="password">Contraseña</label>
         <div class="input-wrap">
           <input type="password" id="password" placeholder="••••••••" required>
-          <svg id="toggle-pass" class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <button type="button" id="toggle-pass" class="eye-btn" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
         <a href="recuperar-contrasena.html" class="forgot">¿Olvidaste tu contraseña?</a>
 
@@ -51,16 +55,16 @@
 
         <div class="divider"><span>Ingresar como</span></div>
 
-        <div class="role-group" id="role-group">
-          <button type="button" class="role-btn" data-role="administrador" data-target="../inicio/inicio-admin.html">
+        <div class="role-group" id="role-group" role="radiogroup" aria-label="Selecciona tu rol">
+          <button type="button" class="role-btn" role="radio" aria-checked="false" data-role="administrador" data-target="../inicio/inicio-admin.html">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Admin
           </button>
-          <button type="button" class="role-btn active" data-role="cliente" data-target="../inicio/inicio-cliente.html">
+          <button type="button" class="role-btn active" role="radio" aria-checked="true" data-role="cliente" data-target="../inicio/inicio-cliente.html">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>
             Cliente
           </button>
-          <button type="button" class="role-btn" data-role="empleado" data-target="../inicio/inicio-empleado.html">
+          <button type="button" class="role-btn" role="radio" aria-checked="false" data-role="empleado" data-target="../inicio/inicio-empleado.html">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             Empleado
           </button>
@@ -69,7 +73,7 @@
 
       <div class="signup-note">¿No tienes cuenta? <a href="registro.html">Regístrate</a></div>
     </div>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/login.js"></script>

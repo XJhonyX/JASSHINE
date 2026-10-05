@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -21,7 +23,7 @@
 
   <div class="nav-group" id="nav-group">
     <div class="nav-label">PRINCIPAL</div>
-    <a class="nav-item active" href="../inicio/inicio-admin.html">
+    <a class="nav-item active" aria-current="page" href="../inicio/inicio-admin.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
       Panel general
     </a>
@@ -69,11 +71,11 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Panel general</div><div class="page-sub">Resumen del día en JASSHINE</div></div>
+    <div><h1 class="page-title">Panel general</h1><p class="page-sub">Resumen del día en JASSHINE</p></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
         <div class="profile-name">Admin</div>
@@ -81,9 +83,9 @@
       </div>
       <div class="avatar">A</div>
     </div>
-  </div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="stat-row">
         <div class="stat-card">
@@ -113,7 +115,7 @@
           <h3>EMPLEADOS ACTIVOS HOY</h3>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Empleado</th><th>Motos</th><th>Estado</th><th>Comisión</th></tr></thead>
+          <thead><tr><th scope="col">Empleado</th><th scope="col">Motos</th><th scope="col">Estado</th><th scope="col">Comisión</th></tr></thead>
           <tbody>
             <tr><td><div class="person"><div class="person-avatar">JE</div>Juan E.</div></td><td>7</td><td><span class="badge green">Disponible</span></td><td>$30.000</td></tr>
             <tr><td><div class="person"><div class="person-avatar">SA</div>Santiago</div></td><td>4</td><td><span class="badge blue">En servicio</span></td><td>$18.000</td></tr>
@@ -123,7 +125,7 @@
         </table></div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

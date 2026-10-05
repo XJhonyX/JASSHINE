@@ -24,24 +24,32 @@ const TIPO_ICONS = {
 
 function renderTiposServicioCliente() {
   const list = document.getElementById('tipos-servicio-list');
+  list.setAttribute('role', 'radiogroup');
+  list.setAttribute('aria-label', 'Tipo de servicio');
   const tipos = DB.getAll('tiposervicio');
 
   list.innerHTML = tipos.map((t) => `
-    <div class="tipo-card" data-id="${t.id}">
-      <div class="tipo-icon">${TIPO_ICONS[t.nombre] || '🧴'}</div>
+    <div class="tipo-card" data-id="${t.id}" role="radio" aria-checked="false" tabindex="0">
+      <div class="tipo-icon" aria-hidden="true">${TIPO_ICONS[t.nombre] || '🧴'}</div>
       <div class="tipo-name">${t.nombre}</div>
       <div class="tipo-desc">${t.descripcion || ''}</div>
       <div class="tipo-price">${formatCOP2(t.precio)}</div>
     </div>
   `).join('');
 
+  const selectTipo = (card) => {
+    list.querySelectorAll('.tipo-card').forEach((c) => { c.classList.remove('selected'); c.setAttribute('aria-checked', 'false'); });
+    card.classList.add('selected');
+    card.setAttribute('aria-checked', 'true');
+    const t = DB.getById('tiposervicio', card.dataset.id);
+    servicioSeleccionado = t;
+    document.getElementById('resumen-precio').textContent = `${t.nombre} · ${formatCOP2(t.precio)}`;
+  };
+
   list.querySelectorAll('.tipo-card').forEach((card) => {
-    card.addEventListener('click', () => {
-      list.querySelectorAll('.tipo-card').forEach((c) => c.classList.remove('selected'));
-      card.classList.add('selected');
-      const t = DB.getById('tiposervicio', card.dataset.id);
-      servicioSeleccionado = t;
-      document.getElementById('resumen-precio').textContent = `${t.nombre} · ${formatCOP2(t.precio)}`;
+    card.addEventListener('click', () => selectTipo(card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); selectTipo(card); }
     });
   });
 }
@@ -59,11 +67,13 @@ function initialsPick(nombre) {
 
 function renderEmpleadosPicker() {
   const picker = document.getElementById('empleados-picker');
+  picker.setAttribute('role', 'radiogroup');
+  picker.setAttribute('aria-label', 'Elige tu lavador');
   const empleados = DB.getAll('empleados');
 
   const cualquieraCard = `
-    <div class="staff-card selectable selected" data-id="">
-      <div class="staff-avatar">✓</div>
+    <div class="staff-card selectable selected" data-id="" role="radio" aria-checked="true" tabindex="0">
+      <div class="staff-avatar" aria-hidden="true">✓</div>
       <div class="staff-name">Cualquiera</div>
       <div class="staff-role">disponible</div>
     </div>`;
@@ -72,9 +82,12 @@ function renderEmpleadosPicker() {
     const enOperacion = EN_OPERACION.includes(e.estado);
     const cls = enOperacion ? 'staff-card selectable' : 'staff-card disabled';
     const badge = ESTADO_MINI_BADGE[e.estado] || 'green';
+    const a11yAttrs = enOperacion
+      ? 'role="radio" aria-checked="false" tabindex="0"'
+      : `role="radio" aria-checked="false" aria-disabled="true" tabindex="-1" title="No está operando hoy" aria-label="${e.nombre}, no disponible hoy"`;
     return `
-      <div class="${cls}" data-id="${e.id}" ${enOperacion ? '' : 'title="No está operando hoy"'}>
-        <div class="staff-avatar">${initialsPick(e.nombre)}</div>
+      <div class="${cls}" data-id="${e.id}" ${a11yAttrs}>
+        <div class="staff-avatar" aria-hidden="true">${initialsPick(e.nombre)}</div>
         <div class="staff-name">${e.nombre}</div>
         <div class="staff-role">${e.cargo}</div>
         <span class="mini-badge ${badge}">${e.estado}</span>
@@ -83,12 +96,18 @@ function renderEmpleadosPicker() {
 
   picker.innerHTML = cualquieraCard + empleadoCards;
 
+  const selectStaff = (card) => {
+    picker.querySelectorAll('.staff-card').forEach((c) => { c.classList.remove('selected'); c.setAttribute('aria-checked', 'false'); });
+    card.classList.add('selected');
+    card.setAttribute('aria-checked', 'true');
+    empleadoSeleccionadoId = card.dataset.id ? Number(card.dataset.id) : null;
+    updateEmpleadoHint();
+  };
+
   picker.querySelectorAll('.staff-card.selectable').forEach((card) => {
-    card.addEventListener('click', () => {
-      picker.querySelectorAll('.staff-card').forEach((c) => c.classList.remove('selected'));
-      card.classList.add('selected');
-      empleadoSeleccionadoId = card.dataset.id ? Number(card.dataset.id) : null;
-      updateEmpleadoHint();
+    card.addEventListener('click', () => selectStaff(card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); selectStaff(card); }
     });
   });
 

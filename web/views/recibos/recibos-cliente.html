@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-cliente.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -32,7 +34,7 @@
     <a class="nav-item" href="../empleados/empleados-cliente.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Empleados
     </a>
-    <a class="nav-item active" href="../recibos/recibos-cliente.html">
+    <a class="nav-item active" aria-current="page" href="../recibos/recibos-cliente.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg>Mis Recibos
     </a>
   </div>
@@ -49,15 +51,15 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Mis Recibos</div><div class="page-sub">Historial de pagos de tus lavadas</div></div>
-    <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-  </div>
+    <div><h1 class="page-title">Mis Recibos</h1><p class="page-sub">Historial de pagos de tus lavadas</p></div>
+    <div class="bell" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="stat-row" style="grid-template-columns:repeat(2,1fr); max-width:520px;">
         <div class="stat-card"><div class="stat-label">Gastado este mes</div><div class="stat-value">$63.000</div></div>
@@ -66,7 +68,7 @@
       <div class="panel">
         <div class="panel-head"><h3>HISTORIAL DE PAGOS</h3><div class="select">Mayo 2026 ▾</div></div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Recibo</th><th>Servicio</th><th>Fecha</th><th>Total</th><th>Estado</th></tr></thead>
+          <thead><tr><th scope="col">Recibo</th><th scope="col">Servicio</th><th scope="col">Fecha</th><th scope="col">Total</th><th scope="col">Estado</th></tr></thead>
           <tbody>
             <tr><td>#1042</td><td>Lavado completo</td><td>25 May, 3:00 PM</td><td>$15.000</td><td><span class="badge green">Pagado</span></td></tr>
             <tr><td>#1021</td><td>Lavado completo</td><td>18 May, 11:00 AM</td><td>$15.000</td><td><span class="badge green">Pagado</span></td></tr>
@@ -76,7 +78,7 @@
         </table></div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

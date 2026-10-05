@@ -9,8 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/recuperar.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
 <div class="split">
   <!-- LADO IZQUIERDO -->
@@ -28,7 +30,7 @@
   </div>
 
   <!-- LADO DERECHO -->
-  <div class="side form-side">
+  <main class="side form-side" id="main-content" tabindex="-1">
     <div class="form-card" id="step-request">
       <div class="steps">
         <div class="step active" data-step="1"><span>1</span></div>
@@ -42,7 +44,7 @@
       <p class="form-sub">Ingresa tu correo y te enviaremos un código de verificación</p>
 
       <form id="request-form">
-        <label>Correo electrónico</label>
+        <label for="email">Correo electrónico</label>
         <div class="input-wrap">
           <input type="email" id="email" placeholder="correo@ejemplo.com" required>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
@@ -67,13 +69,13 @@
       <p class="form-sub">Enviamos un código de 6 dígitos a <span id="sent-email">tu correo</span></p>
 
       <form id="code-form">
-        <div class="code-inputs">
-          <input maxlength="1" class="code-digit" required>
-          <input maxlength="1" class="code-digit" required>
-          <input maxlength="1" class="code-digit" required>
-          <input maxlength="1" class="code-digit" required>
-          <input maxlength="1" class="code-digit" required>
-          <input maxlength="1" class="code-digit" required>
+        <div class="code-inputs" role="group" aria-label="Código de verificación de 6 dígitos">
+          <input maxlength="1" class="code-digit" inputmode="numeric" aria-label="Dígito 1 de 6" required>
+          <input maxlength="1" class="code-digit" inputmode="numeric" aria-label="Dígito 2 de 6" required>
+          <input maxlength="1" class="code-digit" inputmode="numeric" aria-label="Dígito 3 de 6" required>
+          <input maxlength="1" class="code-digit" inputmode="numeric" aria-label="Dígito 4 de 6" required>
+          <input maxlength="1" class="code-digit" inputmode="numeric" aria-label="Dígito 5 de 6" required>
+          <input maxlength="1" class="code-digit" inputmode="numeric" aria-label="Dígito 6 de 6" required>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Verificar código</button>
       </form>
@@ -95,15 +97,19 @@
       <p class="form-sub">Debe tener al menos 8 caracteres</p>
 
       <form id="reset-form">
-        <label>Nueva contraseña</label>
+        <label for="new-password">Nueva contraseña</label>
         <div class="input-wrap">
           <input type="password" id="new-password" placeholder="••••••••" minlength="8" required>
-          <svg class="eye toggle-pass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <button type="button" class="eye-btn toggle-pass" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
-        <label>Confirmar contraseña</label>
+        <label for="confirm-password">Confirmar contraseña</label>
         <div class="input-wrap">
           <input type="password" id="confirm-password" placeholder="••••••••" minlength="8" required>
-          <svg class="eye toggle-pass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <button type="button" class="eye-btn toggle-pass" aria-label="Mostrar contraseña" aria-pressed="false">
+            <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
         <p class="error-msg hidden" id="error-msg">Las contraseñas no coinciden.</p>
         <button type="submit" class="btn btn-primary btn-block">Guardar contraseña</button>
@@ -117,7 +123,7 @@
       <p class="form-sub" style="text-align:center;">Ya puedes iniciar sesión con tu nueva contraseña.</p>
       <a href="login.html" class="btn btn-primary btn-block">Ir a iniciar sesión</a>
     </div>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/recuperar.js"></script>

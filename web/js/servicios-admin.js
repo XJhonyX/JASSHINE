@@ -23,8 +23,8 @@ function renderTiposServicio() {
       <div style="display:flex; align-items:center; gap:12px;">
         <b>${formatCOP(s.precio)}</b>
         <div class="row-actions">
-          <button class="icon-btn" data-edit="${s.id}" title="Editar">✎</button>
-          <button class="icon-btn" data-delete="${s.id}" title="Eliminar">${ICON_TRASH}</button>
+          <button class="icon-btn" data-edit="${s.id}" title="Editar" aria-label="Editar servicio ${s.nombre}">✎</button>
+          <button class="icon-btn" data-delete="${s.id}" title="Eliminar" aria-label="Eliminar servicio ${s.nombre}">${ICON_TRASH}</button>
         </div>
       </div>
     </div>

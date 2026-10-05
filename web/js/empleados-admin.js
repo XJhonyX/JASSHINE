@@ -34,8 +34,8 @@ function renderEmpleados() {
         <td>${e.telefono}</td>
         <td><span class="badge ${badgeCls}">${e.estado}</span></td>
         <td><div class="row-actions">
-          <button class="icon-btn" data-edit="${e.id}" title="Editar">✎</button>
-          <button class="icon-btn" data-delete="${e.id}" title="Eliminar">${ICON_TRASH}</button>
+          <button class="icon-btn" data-edit="${e.id}" title="Editar" aria-label="Editar empleado ${e.nombre}">✎</button>
+          <button class="icon-btn" data-delete="${e.id}" title="Eliminar" aria-label="Eliminar empleado ${e.nombre}">${ICON_TRASH}</button>
         </div></td>
       </tr>`;
   }).join('');

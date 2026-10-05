@@ -6,7 +6,7 @@
     --border-soft:rgba(255,255,255,.05);
     --text:#eef3fb;
     --text-muted:#8492a8;
-    --text-faint:#54637a;
+    --text-faint:#7a88a8; /* AJUSTE a11y: contraste AA (antes #54637a = 3.15:1, ahora 5.4:1) */
     --accent:#0b63f6;
     --accent-2:#4f8dfb;
     --accent-glow:rgba(11,99,246,.35);

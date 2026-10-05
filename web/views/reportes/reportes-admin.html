@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -49,7 +51,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg>
       Facturación
     </a>
-    <a class="nav-item active" href="../reportes/reportes-admin.html">
+    <a class="nav-item active" aria-current="page" href="../reportes/reportes-admin.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
       Reportes
     </a>
@@ -69,11 +71,11 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Reportes</div><div class="page-sub">Desempeño e ingresos de JASSHINE</div></div>
+    <div><h1 class="page-title">Reportes</h1><p class="page-sub">Desempeño e ingresos de JASSHINE</p></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
         <div class="profile-name">Admin</div>
@@ -81,9 +83,9 @@
       </div>
       <div class="avatar">A</div>
     </div>
-  </div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="two-col">
         <div class="panel">
@@ -121,7 +123,7 @@
         </div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

@@ -39,8 +39,8 @@ function renderReservas() {
         <td>${nombreEmpleado(r.id_empleado)}</td>
         <td><span class="badge ${badgeCls}">${r.estado}</span></td>
         <td><div class="row-actions">
-          <button class="icon-btn" data-edit="${r.id}" title="Editar">✎</button>
-          <button class="icon-btn" data-delete="${r.id}" title="Cancelar">${ICON_TRASH}</button>
+          <button class="icon-btn" data-edit="${r.id}" title="Editar" aria-label="Editar cita de ${r.cliente}">✎</button>
+          <button class="icon-btn" data-delete="${r.id}" title="Cancelar" aria-label="Cancelar cita de ${r.cliente}">${ICON_TRASH}</button>
         </div></td>
       </tr>`;
   }).join('');

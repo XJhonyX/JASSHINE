@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -57,7 +59,7 @@
 
   <div class="nav-group sidebar-foot">
     <div class="nav-label">CUENTA</div>
-    <a class="nav-item active" href="../configuracion/configuracion-admin.html">
+    <a class="nav-item active" aria-current="page" href="../configuracion/configuracion-admin.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       Configuración
     </a>
@@ -69,11 +71,11 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Configuración</div><div class="page-sub">Datos del negocio y preferencias</div></div>
+    <div><h1 class="page-title">Configuración</h1><p class="page-sub">Datos del negocio y preferencias</p></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
         <div class="profile-name">Admin</div>
@@ -81,18 +83,18 @@
       </div>
       <div class="avatar">A</div>
     </div>
-  </div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="two-col">
         <div class="panel">
           <div class="panel-head"><h3>DATOS DEL NEGOCIO</h3></div>
           <div style="padding:20px;">
-            <div class="field"><label>Nombre del lavadero</label><input id="f-nombre" value="JASSHINE — Lavadero Inteligente"></div>
-            <div class="field"><label>Correo de contacto</label><input id="f-correo" value="contacto@jasshine.co"></div>
-            <div class="field"><label>Teléfono</label><input id="f-telefono" value="+57 311 234 5678"></div>
-            <div class="field" style="margin-bottom:0;"><label>Dirección</label><input id="f-direccion" value="Cra 45 #12-30, Bogotá"></div>
+            <div class="field"><label for="f-nombre">Nombre del lavadero</label><input id="f-nombre" value="JASSHINE — Lavadero Inteligente"></div>
+            <div class="field"><label for="f-correo">Correo de contacto</label><input id="f-correo" value="contacto@jasshine.co"></div>
+            <div class="field"><label for="f-telefono">Teléfono</label><input id="f-telefono" value="+57 311 234 5678"></div>
+            <div class="field" style="margin-bottom:0;"><label for="f-direccion">Dirección</label><input id="f-direccion" value="Cra 45 #12-30, Bogotá"></div>
           </div>
           <div class="panel-head" style="border-top:1px solid var(--border-soft);"><h3>&nbsp;</h3><button class="btn btn-primary btn-sm" id="btn-guardar-negocio">Guardar cambios</button></div>
         </div>
@@ -105,7 +107,7 @@
         </div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

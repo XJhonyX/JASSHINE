@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -29,7 +31,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Empleados
     </a>
-    <a class="nav-item active" href="../usuarios/usuarios-admin.html">
+    <a class="nav-item active" aria-current="page" href="../usuarios/usuarios-admin.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M6.5 16c.5-1.5 1.8-2.5 2.5-2.5s2 1 2.5 2.5"/><path d="M15 8h4M15 12h4M15 16h2"/></svg>
       Gestión de usuarios
     </a>
@@ -69,11 +71,11 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Gestión de usuarios</div><div class="page-sub">Cuentas de acceso al sistema (admin, empleados y clientes)</div></div>
+    <div><h1 class="page-title">Gestión de usuarios</h1><p class="page-sub">Cuentas de acceso al sistema (admin, empleados y clientes)</p></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
         <div class="profile-name">Admin</div>
@@ -81,9 +83,9 @@
       </div>
       <div class="avatar">A</div>
     </div>
-  </div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="stat-row">
         <div class="stat-card"><div class="stat-label">Usuarios totales</div><div class="stat-value" id="stat-total">—</div></div>
@@ -96,24 +98,24 @@
         <div class="panel-head">
           <h3>TODAS LAS CUENTAS</h3>
           <div class="actions">
-            <select class="select" id="filter-rol">
+            <select class="select" id="filter-rol" aria-label="Filtrar por rol">
               <option value="">Todos los roles</option>
               <option value="admin">Administradores</option>
               <option value="empleado">Empleados</option>
               <option value="cliente">Clientes</option>
             </select>
-            <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="search-usuarios" placeholder="Buscar usuario"></div>
+            <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="search-usuarios" placeholder="Buscar usuario" aria-label="Buscar usuario"></div>
             <button class="btn btn-primary btn-sm" id="btn-nuevo-usuario">+ Nuevo usuario</button>
           </div>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Usuario</th><th>Rol</th><th>Correo</th><th>Estado</th><th></th></tr></thead>
+          <thead><tr><th scope="col">Usuario</th><th scope="col">Rol</th><th scope="col">Correo</th><th scope="col">Estado</th><th scope="col"></th></tr></thead>
           <tbody id="usuarios-tbody"></tbody>
         </table></div>
       </div>
 
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

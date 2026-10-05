@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-empleado.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -29,7 +31,7 @@
     <a class="nav-item" href="../servicio/servicio-empleado.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Servicio
     </a>
-    <a class="nav-item active" href="../recibos/recibos-empleado.html">
+    <a class="nav-item active" aria-current="page" href="../recibos/recibos-empleado.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg>Mis Recibos
     </a>
   </div>
@@ -46,15 +48,15 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Mis Recibos</div><div class="page-sub">Historial de tus comisiones</div></div>
-    <div class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-  </div>
+    <div><h1 class="page-title">Mis Recibos</h1><p class="page-sub">Historial de tus comisiones</p></div>
+    <div class="bell" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="stat-row" style="grid-template-columns:repeat(2,1fr); max-width:520px;">
         <div class="stat-card"><div class="stat-label">Comisión del mes</div><div class="stat-value">$429.000</div><div class="stat-delta up">↑ 12%</div></div>
@@ -63,7 +65,7 @@
       <div class="panel">
         <div class="panel-head"><h3>RECIBOS DE COMISIÓN</h3><div class="select">Mayo 2026 ▾</div></div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Fecha</th><th>Placa</th><th>Servicio</th><th>Tu comisión</th></tr></thead>
+          <thead><tr><th scope="col">Fecha</th><th scope="col">Placa</th><th scope="col">Servicio</th><th scope="col">Tu comisión</th></tr></thead>
           <tbody>
             <tr><td>25 May, 2:30 PM</td><td>WPQ 341</td><td>Lavado completo</td><td>$3.000</td></tr>
             <tr><td>25 May, 1:15 PM</td><td>MTR 892</td><td>Lavado básico</td><td>$1.600</td></tr>
@@ -74,7 +76,7 @@
         </table></div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

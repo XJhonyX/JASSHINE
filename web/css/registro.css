@@ -7,7 +7,7 @@
   --border-soft:rgba(255,255,255,.05);
   --text:#eef3fb;
   --text-muted:#8492a8;
-  --text-faint:#54637a;
+  --text-faint:#7a88a8; /* AJUSTE a11y: contraste AA (antes #54637a = 3.15:1, ahora 5.4:1) */
   --accent:#0b63f6;
   --accent-2:#4f8dfb;
   --accent-glow:rgba(11,99,246,.35);
@@ -25,7 +25,11 @@ button{font-family:inherit; cursor:pointer;}
 .side:first-child{
   background:
     radial-gradient(circle at 30% 20%, var(--accent-glow), transparent 55%),
-    linear-gradient(160deg,#0a1930,#050c18 70%);
+    linear-gradient(160deg, rgba(8,20,40,.5), rgba(5,12,24,.68) 55%, rgba(5,12,24,.86)),
+    url('../images/auth-bg.jpg');
+  background-position: center, center, right center;
+  background-size: cover, cover, cover;
+  background-repeat: no-repeat, no-repeat, no-repeat;
   border-right:1px solid var(--border-soft);
   justify-content:space-between;
 }
@@ -59,6 +63,14 @@ form label:first-of-type{margin-top:0;}
   width:17px; height:17px; color:var(--text-faint);
 }
 .input-wrap svg.eye{cursor:pointer;}
+.eye-btn{
+  position:absolute; right:13px; top:50%; transform:translateY(-50%);
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; padding:2px; margin:0; cursor:pointer;
+  color:var(--text-faint);
+}
+.eye-btn .eye{position:static; width:17px; height:17px; color:inherit;}
+.eye-btn:hover{color:var(--text-muted);}
 .forgot{display:block; text-align:right; font-size:12.5px; color:var(--accent-2); margin:10px 0 22px;}
 .forgot:hover{text-decoration:underline;}
 

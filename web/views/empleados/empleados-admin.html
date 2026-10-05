@@ -10,10 +10,12 @@
 <link rel="stylesheet" href="../../css/panel-administrador.css">
 <link rel="stylesheet" href="../../css/crud-ui.css">
 <link rel="stylesheet" href="../../css/responsive.css">
+<link rel="stylesheet" href="../../css/a11y.css">
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
 
-<aside class="sidebar">
+<aside class="sidebar" aria-label="Menú de navegación">
   <div class="brand">
     <img class="brand-mark" src="../../images/logo-jasshine.png" alt="JASSHINE">
     <div class="brand-name">JASSHINE</div>
@@ -25,7 +27,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
       Panel general
     </a>
-    <a class="nav-item active" href="../empleados/empleados-admin.html">
+    <a class="nav-item active" aria-current="page" href="../empleados/empleados-admin.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       Empleados
     </a>
@@ -69,11 +71,11 @@
 </aside>
 
 <div class="main">
-  <div class="topbar">
+  <header class="topbar">
     <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
-    <div><div class="page-title">Empleados</div><div class="page-sub">Gestiona el equipo de lavadores</div></div>
+    <div><h1 class="page-title">Empleados</h1><p class="page-sub">Gestiona el equipo de lavadores</p></div>
     <div class="profile">
       <div class="profile-meta" style="text-align:right;">
         <div class="profile-name">Admin</div>
@@ -81,25 +83,25 @@
       </div>
       <div class="avatar">A</div>
     </div>
-  </div>
+  </header>
 
-  <div class="content">
+  <main class="content" id="main-content" tabindex="-1">
     <section class="view active">
       <div class="panel">
         <div class="panel-head">
           <h3 id="empleados-count">TODOS LOS EMPLEADOS</h3>
           <div class="actions">
-            <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="search-empleados" placeholder="Buscar empleado"></div>
+            <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="search-empleados" placeholder="Buscar empleado" aria-label="Buscar empleado"></div>
             <button class="btn btn-primary btn-sm" id="btn-nuevo-empleado">+ Nuevo empleado</button>
           </div>
         </div>
         <div class="table-scroll"><table>
-          <thead><tr><th>Empleado</th><th>Cargo</th><th>Contacto</th><th>Estado</th><th></th></tr></thead>
+          <thead><tr><th scope="col">Empleado</th><th scope="col">Cargo</th><th scope="col">Contacto</th><th scope="col">Estado</th><th scope="col"></th></tr></thead>
           <tbody id="empleados-tbody"></tbody>
         </table></div>
       </div>
     </section>
-  </div>
+  </main>
 </div>
 
 <script src="../../js/db.js"></script>

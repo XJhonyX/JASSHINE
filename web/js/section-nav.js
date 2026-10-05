@@ -97,12 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.content').innerHTML = newContent.innerHTML;
         document.title = doc.title;
 
-        links.forEach((l) => l.classList.remove('active'));
+        links.forEach((l) => { l.classList.remove('active'); l.removeAttribute('aria-current'); });
         link.classList.add('active');
+        link.setAttribute('aria-current', 'page');
 
         history.pushState({ href }, '', href);
 
         runPageScripts(doc);
+
+        // Mueve el foco al contenido nuevo: ayuda a quien navega con teclado
+        // y hace que los lectores de pantalla anuncien la sección cargada.
+        document.getElementById('main-content')?.focus();
       } catch (err) {
         // Respaldo: si fetch falla (p. ej. por CORS al abrir el archivo
         // directamente), navegamos normalmente a la página de destino.

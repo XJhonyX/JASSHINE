@@ -1,0 +1,62 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% macro campo(id, etiqueta, valor, tipo='text', req=True, extra='') %}
+<div class="field"><label for="{{ id }}">{{ etiqueta }}</label><input type="{{ tipo }}" id="{{ id }}" name="{{ id }}" value="{{ valor or '' }}"{{ ' required' if req }} {{ extra|safe }}></div>
+{% endmacro %}
+{% block contenido %}
+{% set f = form %}
+<form method="post" action="{{ url_for('configuracion.index') }}">
+  {{ csrf() }}<input type="hidden" name="accion" value="perfil">
+  {% if error_perfil %}<p class="flash error" role="alert">{{ error_perfil }}</p>{% endif %}
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-head"><h3>{{ 'DATOS DEL NEGOCIO Y TU CUENTA' if usuario.rol == 'admin' else 'MI PERFIL' }}</h3></div>
+      <div style="padding:20px;">
+        {% if usuario.rol == 'admin' %}
+          {{ campo('neg_nombre', 'Nombre del lavadero', f.neg_nombre if f else negocio.nombre) }}
+          {{ campo('neg_correo', 'Correo de contacto', f.neg_correo if f else negocio.correo, 'email', False) }}
+          {{ campo('neg_telefono', 'Teléfono', f.neg_telefono if f else negocio.telefono, 'text', False) }}
+          {{ campo('neg_direccion', 'Dirección', f.neg_direccion if f else negocio.direccion, 'text', False) }}
+          {{ campo('neg_meta', 'Meta mensual de ingresos (COP)', f.neg_meta if f else (negocio.meta_mensual|int), 'number', False, 'min="0" step="1000"') }}
+          <hr style="border:0; border-top:1px solid var(--border-soft); margin:6px 0 16px;">
+        {% endif %}
+        {{ campo('nombre', 'Nombre completo', f.nombre if f else usuario.nombre) }}
+        {% if usuario.rol != 'admin' %}{{ campo('telefono', 'Teléfono', f.telefono if f else perfil.telefono, 'text', False) }}{% endif %}
+        {{ campo('email', 'Correo', f.email if f else usuario.email, 'email') }}
+        {% if usuario.rol == 'cliente' %}
+          {{ campo('moto', 'Moto (modelo)', f.moto if f else (vehiculo.tipo if vehiculo else ''), 'text', False) }}
+          {{ campo('placa', 'Placa', f.placa if f else (vehiculo.placa if vehiculo else ''), 'text', False) }}
+        {% endif %}
+      </div>
+      <div class="panel-head" style="border-top:1px solid var(--border-soft);"><span class="muted-note">&nbsp;</span><button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>PREFERENCIAS</h3></div>
+      {% for p in prefs %}
+      {% set marcado = (('pref_' ~ p.clave) in f) if f else p.valor %}
+      <div class="settings-row">
+        <div><div class="settings-label" id="lbl-{{ p.clave }}">{{ p.titulo }}</div><div class="settings-sub">{{ p.sub }}</div></div>
+        <label class="toggle-wrap">
+          <input type="checkbox" class="toggle-input" name="pref_{{ p.clave }}" aria-labelledby="lbl-{{ p.clave }}"{{ ' checked' if marcado }}>
+          <span class="toggle" aria-hidden="true"></span>
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</form>
+
+<div class="panel form-panel" style="margin-top:18px;">
+  <div class="panel-head"><h3>SEGURIDAD · CAMBIAR CONTRASEÑA</h3></div>
+  <form method="post" action="{{ url_for('configuracion.index') }}" class="crud-form">
+    {{ csrf() }}<input type="hidden" name="accion" value="password">
+    {% if error_pass %}<p class="flash error" role="alert">{{ error_pass }}</p>{% endif %}
+    <div class="field"><label for="actual">Contraseña actual</label><input type="password" id="actual" name="actual" autocomplete="current-password" required></div>
+    <div class="field"><label for="nueva">Nueva contraseña</label><input type="password" id="nueva" name="nueva" minlength="8" autocomplete="new-password" required></div>
+    <div class="field"><label for="confirmar">Confirmar nueva contraseña</label><input type="password" id="confirmar" name="confirmar" minlength="8" autocomplete="new-password" required></div>
+    <div class="crud-dialog-actions"><button type="submit" class="btn btn-primary">Cambiar contraseña</button></div>
+  </form>
+</div>
+{% endblock %}

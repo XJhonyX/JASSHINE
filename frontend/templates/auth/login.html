@@ -1,0 +1,46 @@
+{% extends "base_auth.html" %}
+{% from "_macros.html" import csrf, flashes %}
+{% set css = "login.css" %}
+{% block titulo %}Iniciar sesión{% endblock %}
+
+{% block form %}
+<div class="form-card">
+  <h2>Bienvenido de nuevo</h2>
+  <p class="form-sub">Ingresa tus credenciales para continuar</p>
+
+  {{ flashes() }}
+  {% if error %}<p class="flash error" role="alert">{{ error }}</p>{% endif %}
+
+  <form method="post" action="{{ url_for('auth.login') }}">
+    {{ csrf() }}
+    <label for="email">Correo electrónico</label>
+    <div class="input-wrap">
+      <input type="email" id="email" name="email" value="{{ email }}" placeholder="correo@ejemplo.com" autocomplete="email" required>
+      {{ ICONS['user'] }}
+    </div>
+
+    <label for="password">Contraseña</label>
+    <div class="input-wrap">
+      <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required>
+    </div>
+    <a href="{{ url_for('auth.recuperar') }}" class="forgot">¿Olvidaste tu contraseña?</a>
+
+    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+
+    <div class="divider"><span>Ingresar como</span></div>
+
+    <div class="role-group" role="radiogroup" aria-label="Selecciona tu rol">
+      <input type="radio" class="pick-input" name="rol" id="rol-admin" value="admin" {{ 'checked' if rol == 'admin' }}>
+      <label class="role-btn" for="rol-admin">{{ ICONS['shield'] }} Admin</label>
+
+      <input type="radio" class="pick-input" name="rol" id="rol-cliente" value="cliente" {{ 'checked' if rol == 'cliente' }}>
+      <label class="role-btn" for="rol-cliente">{{ ICONS['person'] }} Cliente</label>
+
+      <input type="radio" class="pick-input" name="rol" id="rol-empleado" value="empleado" {{ 'checked' if rol == 'empleado' }}>
+      <label class="role-btn" for="rol-empleado">{{ ICONS['wrench'] }} Empleado</label>
+    </div>
+  </form>
+
+  <div class="signup-note">¿No tienes cuenta? <a href="{{ url_for('auth.registro') }}">Regístrate</a></div>
+</div>
+{% endblock %}

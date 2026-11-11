@@ -1,0 +1,39 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="panel-head" style="padding:0 0 16px;">
+  <h2 class="section-title">Catálogo de servicios</h2>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('servicio.nuevo') }}">+ Nuevo servicio</a>
+</div>
+<div class="grid-2">
+  <div class="panel"><div style="padding:6px 20px;">
+    {% for t in tipos %}
+    <div class="service-row">
+      <div>
+        <div class="service-name">{{ t.nombre }}{% if not t.activo %}<span class="chip-note">oculto</span>{% endif %}</div>
+        <div class="service-sub">{{ t.descripcion or '' }} · {{ t.duracion_min }} min</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <b>{{ t.precio|cop }}</b>
+        <div class="row-actions">
+          <a class="icon-btn" href="{{ url_for('servicio.editar', tid=t.id_tipo_servicio) }}" title="Editar" aria-label="Editar servicio {{ t.nombre }}">✎</a>
+          <a class="icon-btn" href="{{ url_for('servicio.eliminar', tid=t.id_tipo_servicio) }}" title="Eliminar" aria-label="Eliminar servicio {{ t.nombre }}">{{ ICONS['trash'] }}</a>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="empty-row" style="padding:24px 0; text-align:center; color:var(--text-muted);">Aún no hay servicios en el catálogo.</div>
+    {% endfor %}
+  </div></div>
+  <div class="panel">
+    <div class="panel-head"><h3>MÁS SOLICITADOS DEL MES</h3></div>
+    <div style="padding:18px 20px;">
+      {% for c in conteo %}
+      <div class="bar-row">
+        <span class="bar-caption">{{ c.tipo.nombre }} · {{ c.n }} cita{{ '' if c.n == 1 else 's' }}</span>
+        <div class="bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ c.pct }}" aria-label="{{ c.tipo.nombre }}"><div class="bar-fill" style="width:{{ c.pct }}%"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

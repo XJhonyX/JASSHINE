@@ -1,0 +1,34 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="panel">
+  <div class="panel-head">
+    <h3>TODOS LOS EMPLEADOS · {{ total }}</h3>
+    <div class="actions">
+      <form method="get" action="{{ url_for('empleados.index') }}" class="filter-form" role="search">
+        <div class="search">{{ ICONS['search'] }}<input type="search" name="q" value="{{ q }}" placeholder="Buscar empleado" aria-label="Buscar empleado"></div>
+        <button type="submit" class="btn btn-sm">Buscar</button>
+      </form>
+      <a class="btn btn-primary btn-sm" href="{{ url_for('empleados.nuevo') }}">+ Nuevo empleado</a>
+    </div>
+  </div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Empleado</th><th scope="col">Cargo</th><th scope="col">Contacto</th><th scope="col">Estado</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+    <tbody>
+      {% for e in empleados %}
+      <tr>
+        <td><div class="person"><div class="person-avatar">{{ e.nombre|iniciales }}</div><div><div class="person-name">{{ e.nombre }}</div><div class="person-sub">{{ e.email }}</div></div></div></td>
+        <td>{{ e.cargo }}</td>
+        <td>{{ e.telefono or '—' }}</td>
+        <td><span class="badge {{ BADGE_EMPLEADO.get(e.estado, 'blue') }}">{{ e.estado }}</span>{% if not e.usuario.contrasena %}<span class="chip-note">sin contraseña</span>{% endif %}</td>
+        <td><div class="row-actions">
+          <a class="icon-btn" href="{{ url_for('empleados.editar', eid=e.id_empleado) }}" title="Editar" aria-label="Editar empleado {{ e.nombre }}">✎</a>
+          <a class="icon-btn" href="{{ url_for('empleados.eliminar', eid=e.id_empleado) }}" title="Eliminar" aria-label="Eliminar empleado {{ e.nombre }}">{{ ICONS['trash'] }}</a>
+        </div></td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="5">No hay empleados que coincidan con la búsqueda.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

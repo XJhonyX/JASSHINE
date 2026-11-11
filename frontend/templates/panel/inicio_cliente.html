@@ -1,0 +1,30 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="stat-label">Próxima cita</div>
+    {% if proxima %}
+    <div class="stat-value">{{ 'Hoy' if proxima.fecha_hora.date() == hoy else (proxima.fecha_hora|dia_corto ~ ' ' ~ proxima.fecha_hora|mes_corto) }} {{ proxima.fecha_hora|hora }}</div>
+    <div class="stat-delta{{ ' up' if proxima.estado == 'Confirmada' }}">{{ '✓ ' if proxima.estado == 'Confirmada' }}{{ proxima.estado }}</div>
+    {% else %}
+    <div class="stat-value">Sin citas</div>
+    <div class="stat-delta">Agenda una desde Servicio</div>
+    {% endif %}
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Servicios usados</div>
+    <div class="stat-value">{{ usados }}</div>
+    <div class="stat-delta">este mes</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Disponibilidad</div>
+    <div class="stat-value">{{ libres }} turno{{ '' if libres == 1 else 's' }}</div>
+    <div class="stat-delta{{ ' up' if libres }}">{{ 'Abierto ahora' if libres else 'Sin lavadores libres ahora' }}</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>AGENDAR NUEVO SERVICIO</h3><a class="btn btn-primary btn-sm" href="{{ url_for('servicio.index') }}">Ir a Servicio →</a></div>
+  <div style="padding:18px 20px; color:var(--text-muted); font-size:13px;">Elige el tipo de lavado, tu lavador y el horario desde la pestaña <b style="color:var(--text)">Servicio</b> para reservar tu próximo lavado.</div>
+</div>
+{% endblock %}

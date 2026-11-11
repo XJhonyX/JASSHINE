@@ -1,0 +1,47 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-label">Usuarios totales</div><div class="stat-value">{{ total }}</div></div>
+  <div class="stat-card"><div class="stat-label">Administradores</div><div class="stat-value">{{ conteo.admin }}</div></div>
+  <div class="stat-card"><div class="stat-label">Empleados</div><div class="stat-value">{{ conteo.empleado }}</div></div>
+  <div class="stat-card"><div class="stat-label">Clientes</div><div class="stat-value">{{ conteo.cliente }}</div></div>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <h3>TODAS LAS CUENTAS</h3>
+    <div class="actions">
+      <form method="get" action="{{ url_for('usuarios.index') }}" class="filter-form" role="search">
+        <select class="select" name="rol" aria-label="Filtrar por rol">
+          <option value="">Todos los roles</option>
+          <option value="admin"{{ ' selected' if rol == 'admin' }}>Administradores</option>
+          <option value="empleado"{{ ' selected' if rol == 'empleado' }}>Empleados</option>
+          <option value="cliente"{{ ' selected' if rol == 'cliente' }}>Clientes</option>
+        </select>
+        <div class="search">{{ ICONS['search'] }}<input type="search" name="q" value="{{ q }}" placeholder="Buscar usuario" aria-label="Buscar usuario"></div>
+        <button type="submit" class="btn btn-sm">Filtrar</button>
+      </form>
+      <a class="btn btn-primary btn-sm" href="{{ url_for('usuarios.nuevo') }}">+ Nuevo usuario</a>
+    </div>
+  </div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Usuario</th><th scope="col">Rol</th><th scope="col">Correo</th><th scope="col">Estado</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+    <tbody>
+      {% for u in usuarios %}
+      <tr>
+        <td><div class="person"><div class="person-avatar">{{ u.nombre|iniciales }}</div>{{ u.nombre }}</div></td>
+        <td><span class="badge {{ BADGE_ROL.get(u.rol, 'blue') }}">{{ ROL_LABEL[u.rol] }}</span></td>
+        <td>{{ u.email }}</td>
+        <td><span class="badge {{ BADGE_USUARIO.get(u.estado, 'green') }}">{{ u.estado|capitalize }}</span>{% if not u.contrasena %}<span class="chip-note">sin contraseña</span>{% endif %}</td>
+        <td><div class="row-actions">
+          <a class="icon-btn" href="{{ url_for('usuarios.editar', uid=u.id_usuario) }}" title="Editar" aria-label="Editar usuario {{ u.nombre }}">✎</a>
+          <a class="icon-btn" href="{{ url_for('usuarios.eliminar', uid=u.id_usuario) }}" title="Eliminar" aria-label="Eliminar usuario {{ u.nombre }}">{{ ICONS['trash'] }}</a>
+        </div></td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="5">No hay usuarios que coincidan con la búsqueda.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% block contenido %}
+<div class="panel confirm-panel">
+  <h2 class="section-title">{{ titulo }}</h2>
+  <p>{{ mensaje }}</p>
+  <form method="post" action="{{ accion }}">
+    {{ csrf() }}
+    <div class="crud-dialog-actions">
+      <a class="btn" href="{{ volver }}">Cancelar</a>
+      <button type="submit" class="btn crud-danger">{{ boton }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

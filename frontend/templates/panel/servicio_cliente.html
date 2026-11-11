@@ -1,0 +1,65 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% set iconos = {'Lavado básico': '🏍️', 'Lavado completo': '💧', 'Lavado + Pulido': '✨', 'Lavado Full': '🏆'} %}
+{% block contenido %}
+<form method="post" action="{{ url_for('servicio.index') }}">
+  {{ csrf() }}
+  {% if error %}<p class="flash error" role="alert">{{ error }}</p>{% endif %}
+
+  <div class="panel">
+    <div class="panel-head"><h3>TIPO DE SERVICIO</h3></div>
+    <div style="padding:16px 20px;">
+      <div class="pick-grid" role="radiogroup" aria-label="Tipo de servicio">
+        {% for t in tipos %}
+        <input type="radio" class="pick-input" name="tipo" id="tipo-{{ t.id_tipo_servicio }}" value="{{ t.id_tipo_servicio }}"{{ ' checked' if form.tipo == t.id_tipo_servicio|string }}{{ ' required' if loop.first }}>
+        <label class="tipo-card" for="tipo-{{ t.id_tipo_servicio }}">
+          <div class="tipo-icon" aria-hidden="true">{{ iconos.get(t.nombre, '🧴') }}</div>
+          <div class="tipo-name">{{ t.nombre }}</div>
+          <div class="tipo-desc">{{ t.descripcion or '' }}</div>
+          <div class="tipo-price">{{ t.precio|cop }}</div>
+        </label>
+        {% else %}
+        <p class="muted-note">El administrador aún no ha publicado servicios.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:18px;">
+    <div class="panel-head"><h3>DATOS DE LA CITA</h3></div>
+    <div style="padding:16px 20px;" class="grid-3">
+      <div class="field" style="margin-bottom:0;"><label for="input-placa">Placa del vehículo</label><input id="input-placa" name="placa" value="{{ form.placa }}" placeholder="Ej: WPQ 341" required></div>
+      <div class="field" style="margin-bottom:0;"><label for="input-fecha">Fecha</label><input type="date" id="input-fecha" name="fecha" value="{{ form.fecha }}" min="{{ hoy }}" required></div>
+      <div class="field" style="margin-bottom:0;"><label for="input-hora">Hora</label><input type="time" id="input-hora" name="hora" value="{{ form.hora }}" required></div>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:18px;">
+    <div class="panel-head"><h3>ELIGE TU LAVADOR</h3></div>
+    <div style="padding:16px 20px;">
+      <div class="pick-grid" role="radiogroup" aria-label="Elige tu lavador">
+        <input type="radio" class="pick-input" name="empleado" id="emp-0" value=""{{ ' checked' if not form.empleado }}>
+        <label class="staff-card selectable" for="emp-0">
+          <div class="staff-avatar" aria-hidden="true">✓</div>
+          <div class="staff-name">Cualquiera</div>
+          <div class="staff-role">disponible</div>
+        </label>
+        {% for e in empleados %}
+        <input type="radio" class="pick-input" name="empleado" id="emp-{{ e.id_empleado }}" value="{{ e.id_empleado }}"{{ ' checked' if form.empleado == e.id_empleado|string }}{{ ' disabled' if not e.en_operacion }}>
+        <label class="staff-card {{ 'selectable' if e.en_operacion else 'disabled' }}" for="emp-{{ e.id_empleado }}"{% if not e.en_operacion %} title="No está operando hoy"{% endif %}>
+          <div class="staff-avatar" aria-hidden="true">{{ e.nombre|iniciales }}</div>
+          <div class="staff-name">{{ e.nombre }}</div>
+          <div class="staff-role">{{ e.cargo }}</div>
+          <span class="mini-badge {{ BADGE_EMPLEADO.get(e.estado, 'blue') }}">{{ e.estado }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <p class="muted-note" style="margin-top:14px;">Si el lavador está <b>Disponible</b>, tu cita se le asigna y se confirma de una vez. Si está <b>En servicio</b>, entra en su cola y la inicia en cuanto termine. Quienes están <b>Descansando</b> o <b>Inactivos</b> no se pueden elegir.</p>
+    </div>
+    <div class="panel-head" style="border-top:1px solid var(--border-soft);">
+      <span class="muted-note">Revisa los datos y confirma tu cita</span>
+      <button type="submit" class="btn btn-primary btn-sm">Confirmar cita →</button>
+    </div>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="panel-head" style="padding:0 0 16px;"><h2 class="section-title">Nuestro equipo</h2></div>
+<div class="pick-grid" style="grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));">
+  {% for e in equipo %}
+  <div class="staff-card">
+    <div class="staff-avatar" aria-hidden="true">{{ e.nombre|iniciales }}</div>
+    <div class="staff-name">{{ e.nombre }}</div>
+    <div class="staff-role">{{ e.cargo }}</div>
+    <span class="mini-badge {{ BADGE_EMPLEADO.get(e.estado, 'blue') }}">{{ e.estado }}</span>
+  </div>
+  {% else %}
+  <p class="muted-note">Aún no hay lavadores registrados.</p>
+  {% endfor %}
+</div>
+<div class="panel" style="margin-top:18px;">
+  <div style="padding:16px 20px; color:var(--text-muted); font-size:12.5px;">Puedes elegir a tu lavador de confianza al agendar un nuevo servicio, en el paso "Elige tu lavador".</div>
+</div>
+{% endblock %}

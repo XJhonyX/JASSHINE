@@ -1,0 +1,29 @@
+# __pycache__/
+# .pytest_cache/
+# .venv/
+# instance/
+# *.db
+# .env
+
+
+# Entorno virtual
+.venv/
+venv/
+
+# Variables privadas
+.env
+.env.*
+
+# Base de datos local
+instance/*.db
+instance/*.sqlite
+instance/*.sqlite3
+instance/secret.key
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Editor
+.vscode/

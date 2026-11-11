@@ -1,0 +1,39 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% block contenido %}
+<div class="stat-row" style="grid-template-columns:repeat(3,1fr);">
+  <div class="stat-card"><div class="stat-label">Facturado este mes</div><div class="stat-value">{{ facturado|cop }}</div><div class="stat-delta">{{ mes }}</div></div>
+  <div class="stat-card"><div class="stat-label">Recibos emitidos</div><div class="stat-value">{{ emitidos }}</div><div class="stat-delta">Este mes</div></div>
+  <div class="stat-card"><div class="stat-label">Por cobrar</div><div class="stat-value" style="color:var(--orange)">{{ por_cobrar|cop }}</div><div class="stat-delta warn">{{ n_por_cobrar }} recibo{{ '' if n_por_cobrar == 1 else 's' }}</div></div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>RECIBOS RECIENTES</h3></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Recibo</th><th scope="col">Cliente</th><th scope="col">Servicio</th><th scope="col">Fecha</th><th scope="col">Total</th><th scope="col">Estado</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+    <tbody>
+      {% for r in recibos %}
+      <tr>
+        <td>#{{ r.id_recibo }}</td>
+        <td>{{ r.servicio.vehiculo.cliente.nombre }}</td>
+        <td>{{ r.servicio.tipo.nombre }}</td>
+        <td>{{ r.fecha_emision|fecha_hora }}</td>
+        <td>{{ r.total|cop }}</td>
+        <td><span class="badge {{ BADGE_RECIBO.get(r.estado, 'blue') }}">{{ r.estado }}</span></td>
+        <td>
+          {% if r.estado == 'Pendiente' %}
+          <form method="post" action="{{ url_for('facturacion.estado', rid=r.id_recibo) }}" class="inline-form">
+            {{ csrf() }}
+            <button type="submit" name="accion" value="pagar" class="btn btn-sm">Pagado</button>
+            <button type="submit" name="accion" value="anular" class="btn btn-sm">Anular</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="7">Aún no se han emitido recibos. Se generan al finalizar un lavado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="two-col">
+  <div class="panel">
+    <div class="panel-head"><h3>INGRESOS · ÚLTIMOS 7 DÍAS</h3></div>
+    <div class="chart-bars" style="padding:20px 24px;" role="img" aria-label="Ingresos de los últimos 7 días: {% for d in dias %}{{ d.etiqueta }} {{ d.total|cop }}{{ ', ' if not loop.last }}{% endfor %}">
+      {% for d in dias %}
+      <div class="chart-col"><div class="chart-bar" style="height:{{ d.pct }}%" title="{{ d.total|cop }}"></div><div class="chart-bar-label">{{ d.etiqueta }}</div></div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>META MENSUAL</h3></div>
+    <div style="padding:24px; display:flex; align-items:center; gap:18px;">
+      <div class="donut" style="--pct:{{ avance }}%;"><div class="donut-inner"><b>{{ avance }}%</b><small>de la meta</small></div></div>
+      <div>
+        <div class="stat-label">Meta de {{ mes }}</div>
+        <div class="stat-value" style="font-size:18px;">{{ meta|cop }}</div>
+        <div class="stat-delta">Llevas {{ ingresos_mes|cop }} · faltan {{ faltan|cop }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>DESEMPEÑO POR EMPLEADO · {{ mes|upper }}</h3></div>
+  <div style="padding:18px 20px;">
+    {% for d in desempeno %}
+    <div class="bar-row">
+      <span class="bar-caption">{{ d.empleado.nombre }} · {{ d.total|cop }} generados</span>
+      <div class="bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ d.pct }}" aria-label="{{ d.empleado.nombre }}"><div class="bar-fill" style="width:{{ d.pct }}%"></div></div>
+    </div>
+    {% else %}
+    <p class="muted-note">Aún no hay empleados activos.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

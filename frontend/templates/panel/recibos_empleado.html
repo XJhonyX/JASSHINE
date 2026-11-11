@@ -1,0 +1,24 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="stat-row" style="grid-template-columns:repeat(2,1fr); max-width:520px;">
+  <div class="stat-card"><div class="stat-label">Comisión del mes</div><div class="stat-value">{{ total_mes|cop }}</div><div class="stat-delta">{{ mes }}</div></div>
+  <div class="stat-card"><div class="stat-label">Lavadas del mes</div><div class="stat-value">{{ n_mes }}</div></div>
+</div>
+<div class="panel">
+  <div class="panel-head"><h3>RECIBOS DE COMISIÓN</h3></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Placa</th><th scope="col">Servicio</th><th scope="col">Tu comisión</th><th scope="col">Pago</th></tr></thead>
+    <tbody>
+      {% for c in comisiones %}
+      <tr>
+        <td>{{ c.fecha_calculo|fecha_hora }}</td><td>{{ c.servicio.vehiculo.placa }}</td><td>{{ c.servicio.tipo.nombre }}</td>
+        <td>{{ c.monto|cop }}</td>
+        <td><span class="badge {{ 'green' if c.pagada else 'orange' }}">{{ 'Pagada' if c.pagada else 'Pendiente' }}</span></td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="5">Tus comisiones aparecerán aquí cuando finalices lavados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

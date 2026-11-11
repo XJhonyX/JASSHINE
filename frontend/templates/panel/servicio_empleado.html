@@ -1,0 +1,31 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% block contenido %}
+<div class="panel-head" style="padding:0 0 16px;">
+  <h2 class="section-title">Cola de servicio</h2>
+  <div class="badge blue">{{ total }} en turno</div>
+</div>
+
+<div class="panel">
+  {% for s in espera %}
+  <div class="queue-card">
+    <div class="person"><div class="person-avatar" aria-hidden="true">🏍</div><div><div class="plate">{{ s.vehiculo.placa }}</div><div class="person-sub">{{ s.tipo.nombre }} · {{ s.vehiculo.cliente.nombre }} · {{ s.fecha_inicio|fecha_hora }}</div></div></div>
+    <form method="post" action="{{ url_for('servicio.iniciar', sid=s.id_servicio) }}" class="inline-form">{{ csrf() }}<button type="submit" class="btn btn-primary btn-sm">Iniciar lavado</button></form>
+  </div>
+  {% else %}
+  <div class="empty-row" style="padding:22px 20px; text-align:center; color:var(--text-muted);">No tienes motos en espera.</div>
+  {% endfor %}
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>EN CURSO</h3></div>
+  {% for s in en_curso %}
+  <div class="queue-card">
+    <div class="person"><div class="person-avatar" aria-hidden="true">🏍</div><div><div class="plate">{{ s.vehiculo.placa }}</div><div class="person-sub">{{ s.tipo.nombre }} · iniciado {{ s.fecha_inicio|hora }}</div></div></div>
+    <form method="post" action="{{ url_for('servicio.finalizar', sid=s.id_servicio) }}" class="inline-form">{{ csrf() }}<button type="submit" class="btn btn-sm">Marcar finalizado</button></form>
+  </div>
+  {% else %}
+  <div class="empty-row" style="padding:22px 20px; text-align:center; color:var(--text-muted);">No tienes ningún lavado en curso.</div>
+  {% endfor %}
+</div>
+{% endblock %}

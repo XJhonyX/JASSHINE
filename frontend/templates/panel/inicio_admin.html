@@ -1,0 +1,44 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="stat-row">
+  <div class="stat-card">
+    <div class="stat-label">Ingresos hoy</div>
+    <div class="stat-value">{{ ingresos|cop }}</div>
+    <div class="stat-delta{{ ' up' if delta_ingresos and '↑' in delta_ingresos }}">{{ delta_ingresos or 'Hoy' }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Vehículos lavados</div>
+    <div class="stat-value">{{ lavados }}</div>
+    <div class="stat-delta{{ ' up' if delta_lavados and '↑' in delta_lavados }}">{{ delta_lavados or 'Hoy' }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Lavadas pendientes</div>
+    <div class="stat-value" style="color:var(--orange)">{{ pendientes }}</div>
+    <div class="stat-delta">En cola o en curso</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-label">Comisiones del día</div>
+    <div class="stat-value">{{ comisiones|cop }}</div>
+    <div class="stat-delta">Hoy</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>EMPLEADOS ACTIVOS HOY</h3></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Empleado</th><th scope="col">Motos</th><th scope="col">Estado</th><th scope="col">Comisión</th></tr></thead>
+    <tbody>
+      {% for f in filas %}
+      <tr>
+        <td><div class="person"><div class="person-avatar">{{ f.empleado.nombre|iniciales }}</div>{{ f.empleado.nombre }}</div></td>
+        <td>{{ f.motos }}</td>
+        <td><span class="badge {{ BADGE_EMPLEADO.get(f.empleado.estado, 'blue') }}">{{ f.empleado.estado }}</span></td>
+        <td>{{ f.comision|cop }}</td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="4">Aún no hay empleados activos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="stat-row" style="grid-template-columns:repeat(2,1fr); max-width:520px;">
+  <div class="stat-card"><div class="stat-label">Gastado este mes</div><div class="stat-value">{{ gastado|cop }}</div><div class="stat-delta">{{ mes }}</div></div>
+  <div class="stat-card"><div class="stat-label">Recibos</div><div class="stat-value">{{ n }}</div></div>
+</div>
+<div class="panel">
+  <div class="panel-head"><h3>HISTORIAL DE PAGOS</h3></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Recibo</th><th scope="col">Servicio</th><th scope="col">Fecha</th><th scope="col">Total</th><th scope="col">Estado</th></tr></thead>
+    <tbody>
+      {% for r in recibos %}
+      <tr>
+        <td>#{{ r.id_recibo }}</td><td>{{ r.servicio.tipo.nombre }} · {{ r.servicio.vehiculo.placa }}</td><td>{{ r.fecha_emision|fecha_hora }}</td>
+        <td>{{ r.total|cop }}</td>
+        <td><span class="badge {{ BADGE_RECIBO.get(r.estado, 'blue') }}">{{ r.estado }}</span></td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="5">Todavía no tienes recibos. Se generan cuando termina tu lavado.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

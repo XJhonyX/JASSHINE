@@ -1,0 +1,37 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% block contenido %}
+<div class="panel form-panel">
+  <div class="panel-head"><h3>{{ titulo|upper }}</h3></div>
+  <form method="post" action="{{ accion }}" class="crud-form">
+    {{ csrf() }}
+    {% if error %}<p class="flash error" role="alert">{{ error }}</p>{% endif %}
+    {% for c in campos %}
+    <div class="field">
+      <label for="f-{{ c.name }}">{{ c.label }}</label>
+      {% if c.type == 'select' %}
+      <select id="f-{{ c.name }}" name="{{ c.name }}"{{ ' required' if c.required }}>
+        {% for valor, etiqueta in c.options %}
+        <option value="{{ valor }}"{{ ' selected' if valor|string == c.value|string }}>{{ etiqueta }}</option>
+        {% endfor %}
+      </select>
+      {% else %}
+      <input type="{{ c.type }}" id="f-{{ c.name }}" name="{{ c.name }}"
+             {% if c.type != 'password' %}value="{{ c.value }}"{% endif %}
+             {% if c.placeholder %}placeholder="{{ c.placeholder }}"{% endif %}
+             {% if c.min is defined %}min="{{ c.min }}"{% endif %}
+             {% if c.step is defined %}step="{{ c.step }}"{% endif %}
+             {% if c.minlength is defined %}minlength="{{ c.minlength }}"{% endif %}
+             {% if c.type == 'password' %}autocomplete="new-password"{% endif %}
+             {{ 'required' if c.required }}>
+      {% endif %}
+      {% if c.hint %}<p class="form-hint">{{ c.hint }}</p>{% endif %}
+    </div>
+    {% endfor %}
+    <div class="crud-dialog-actions">
+      <a class="btn" href="{{ volver }}">Cancelar</a>
+      <button type="submit" class="btn btn-primary">{{ boton }}</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

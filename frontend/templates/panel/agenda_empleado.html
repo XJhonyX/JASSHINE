@@ -1,0 +1,16 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="panel">
+  <div class="panel-head"><h3>CITAS ASIGNADAS · {{ reservas|length }}</h3></div>
+  {% if reservas %}
+  <div class="agenda-grid">
+    {% for r in reservas %}
+    <div class="agenda-hour">{{ r.fecha_hora|hora }}<br><small>{{ r.fecha_hora|dia_corto }} {{ r.fecha_hora|mes_corto }}</small></div>
+    <div class="agenda-slot"><div class="appt-chip {{ 'pending' if r.estado == 'Pendiente' else '' }}"><b>{{ r.vehiculo.placa }}</b><span>· {{ r.tipo.nombre }} · {{ r.cliente.nombre }}</span></div></div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-row" style="padding:28px 20px; text-align:center; color:var(--text-muted);">No tienes citas asignadas por ahora.</div>
+  {% endif %}
+</div>
+{% endblock %}

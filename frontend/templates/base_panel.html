@@ -1,0 +1,84 @@
+{% from "_macros.html" import csrf, flashes %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASSHINE — {{ usuario.rol_label }} — {{ titulo }}</title>
+<link rel="icon" href="{{ url_for('static', filename='images/logo-jasshine.png') }}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/' ~ PANEL_CSS) }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/crud-ui.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/a11y.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/nojs.css') }}">
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+{# Menú móvil sin JavaScript: el checkbox guarda si el cajón está abierto #}
+<input type="checkbox" id="menu-state" class="menu-state" aria-label="Abrir o cerrar el menú de navegación">
+
+<aside class="sidebar" aria-label="Menú de navegación">
+  <div class="brand">
+    <img class="brand-mark" src="{{ url_for('static', filename='images/logo-jasshine.png') }}" alt="JASSHINE">
+    <div class="brand-name">JASSHINE</div>
+  </div>
+
+  {% if usuario.rol == 'empleado' %}
+  <div class="who"><div class="avatar">{{ usuario.nombre|iniciales }}</div><div><div class="who-name">{{ usuario.nombre }}</div><div class="who-role">Empleado</div></div></div>
+  {% endif %}
+
+  <div class="nav-group" id="nav-group">
+    {% if usuario.rol == 'admin' %}<div class="nav-label">PRINCIPAL</div>{% endif %}
+    {% for bp, etiqueta, icono in NAV %}
+    <a class="nav-item{{ ' active' if request.blueprint == bp }}" href="{{ url_for(bp ~ '.index') }}"{% if request.blueprint == bp %} aria-current="page"{% endif %}>
+      {{ ICONS[icono] }}
+      {{ etiqueta }}
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="nav-group sidebar-foot">
+    {% if usuario.rol == 'admin' %}<div class="nav-label">CUENTA</div>{% endif %}
+    <a class="nav-item{{ ' active' if request.blueprint == 'configuracion' }}" href="{{ url_for('configuracion.index') }}"{% if request.blueprint == 'configuracion' %} aria-current="page"{% endif %}>
+      {{ ICONS['configuracion'] }}
+      Configuración
+    </a>
+    <form method="post" action="{{ url_for('auth.logout') }}" class="logout-form">
+      {{ csrf() }}
+      <button type="submit" class="nav-item nav-button">
+        {{ ICONS['logout'] }}
+        Cerrar sesión
+      </button>
+    </form>
+  </div>
+</aside>
+<label for="menu-state" class="sidebar-backdrop-label" aria-hidden="true"></label>
+
+<div class="main">
+  <header class="topbar">
+    <label for="menu-state" class="menu-toggle" aria-hidden="true">{{ ICONS['menu'] }}</label>
+    <div><h1 class="page-title">{{ titulo }}</h1><p class="page-sub">{{ sub }}</p></div>
+    {% if usuario.rol == 'admin' %}
+    <div class="profile">
+      <div class="profile-meta" style="text-align:right;">
+        <div class="profile-name">{{ usuario.nombre }}</div>
+        <div class="profile-role">Administrador</div>
+      </div>
+      <div class="avatar">{{ usuario.nombre|iniciales }}</div>
+    </div>
+    {% else %}
+    <div class="bell" aria-hidden="true">{{ ICONS['bell'] }}</div>
+    {% endif %}
+  </header>
+
+  <main class="content" id="main-content" tabindex="-1">
+    {{ flashes() }}
+    {% block contenido %}{% endblock %}
+  </main>
+</div>
+<script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

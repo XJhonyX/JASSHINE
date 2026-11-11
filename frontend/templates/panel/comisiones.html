@@ -1,0 +1,37 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% block contenido %}
+<div class="stat-row" style="grid-template-columns:repeat(3,1fr);">
+  <div class="stat-card"><div class="stat-label">Comisiones del mes</div><div class="stat-value">{{ total_mes|cop }}</div><div class="stat-delta">{{ mes }}</div></div>
+  <div class="stat-card"><div class="stat-label">Promedio por empleado</div><div class="stat-value">{{ promedio|cop }}</div><div class="stat-delta">{{ n_empleados }} empleados activos</div></div>
+  <div class="stat-card"><div class="stat-label">Pendiente por pagar</div><div class="stat-value" style="color:var(--orange)">{{ pendiente|cop }}</div><div class="stat-delta warn">Se paga al cierre del mes</div></div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>COMISIONES POR EMPLEADO · {{ mes|upper }}</h3></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Empleado</th><th scope="col">Lavadas</th><th scope="col">% comisión</th><th scope="col">Total generado</th><th scope="col">Estado de pago</th></tr></thead>
+    <tbody>
+      {% for f in filas %}
+      <tr>
+        <td><div class="person"><div class="person-avatar">{{ f.empleado.nombre|iniciales }}</div>{{ f.empleado.nombre }}</div></td>
+        <td>{{ f.lavadas }}</td>
+        <td>18%</td>
+        <td>{{ f.total|cop }}</td>
+        <td>
+          {% if f.lavadas == 0 %}<span class="muted-note">Sin comisiones</span>
+          {% elif f.pendiente > 0 %}
+          <form method="post" action="{{ url_for('comisiones.pagar', eid=f.empleado.id_empleado) }}" class="inline-form">
+            {{ csrf() }}<span class="badge orange">Pendiente {{ f.pendiente|cop }}</span>
+            <button type="submit" class="btn btn-sm">Marcar pagado</button>
+          </form>
+          {% else %}<span class="badge green">Pagado</span>{% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="5">Aún no hay empleados activos.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

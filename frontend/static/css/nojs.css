@@ -1,0 +1,103 @@
+/* JASSHINE — Mejora progresiva: los controles esenciales siguen funcionando
+   con HTML/CSS aunque JavaScript esté desactivado o no se pueda cargar. */
+
+/* ---------- campos nativos ocultos pero accesibles por teclado ---------- */
+.menu-state, .pick-input, .toggle-input{
+  position:absolute; width:1px; height:1px; margin:-1px; padding:0;
+  overflow:hidden; clip:rect(0,0,0,0); border:0; opacity:0;
+}
+
+/* ---------- menú móvil ---------- */
+.sidebar-backdrop-label{display:none;}
+@media (min-width:981px){ .menu-state{display:none;} }
+@media (max-width:980px){
+  .menu-state:checked ~ .sidebar{transform:translateX(0);}
+  .menu-state:checked ~ .sidebar-backdrop-label{
+    display:block; position:fixed; inset:0; z-index:150; background:rgba(2,6,14,.65);
+  }
+  .menu-state:focus-visible ~ .main .menu-toggle{outline:2px solid var(--accent-2, #4f8dfb); outline-offset:2px;}
+}
+.menu-toggle{cursor:pointer;}
+
+/* ---------- selector de rol (login) ---------- */
+.role-btn{cursor:pointer;}
+.pick-input:checked + .role-btn{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  border-color:transparent; color:#fff;
+}
+.pick-input:focus-visible + .role-btn,
+.pick-input:focus-visible + .tipo-card,
+.pick-input:focus-visible + .staff-card{outline:2px solid var(--accent-2, #4f8dfb); outline-offset:2px;}
+
+/* ---------- tarjetas seleccionables (servicio y lavador) ---------- */
+.tipo-card, .staff-card.selectable{display:block; cursor:pointer;}
+.pick-input:checked + .tipo-card{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent);}
+.pick-input:checked + .staff-card.selectable{border-color:var(--accent); box-shadow:0 0 0 1px var(--accent);}
+.pick-input:disabled + .staff-card{opacity:.4; cursor:not-allowed;}
+.pick-grid .pick-wrap{display:contents;}
+
+/* ---------- interruptores (Configuración) ---------- */
+.toggle-wrap{display:inline-block; cursor:pointer; flex-shrink:0;}
+.toggle-input:checked + .toggle{background:var(--accent);}
+.toggle-input:checked + .toggle::after{left:20px;}
+.toggle-input:focus-visible + .toggle{outline:2px solid var(--accent-2, #4f8dfb); outline-offset:3px;}
+
+/* ---------- mensajes (reemplazan al toast de JavaScript) ---------- */
+.flash{
+  border-radius:10px; padding:11px 14px; margin:0 0 16px; font-size:13.5px; line-height:1.45;
+  border:1px solid var(--border); background:var(--bg-card-2, #0f2036); color:var(--text, #eef3fb);
+}
+.flash.ok{border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.12);}
+.flash.error{border-color:rgba(239,68,68,.5); background:rgba(239,68,68,.12);}
+.flash.info{border-color:rgba(79,141,251,.5); background:rgba(11,99,246,.14);}
+
+/* ---------- botón del menú que envía un formulario (cerrar sesión) ---------- */
+.logout-form{margin:0;}
+.nav-button{
+  width:100%; background:none; border:none; font:inherit; text-align:left; cursor:pointer;
+  margin-top:6px;
+}
+
+/* ---------- formularios de crear / editar (reemplazan a los modales) ---------- */
+.form-panel{max-width:560px;}
+.form-panel .crud-form{padding:20px;}
+.form-hint{font-size:12px; color:var(--text-muted); margin-top:6px;}
+.confirm-panel{max-width:520px; padding:22px;}
+.confirm-panel p{color:var(--text-muted); line-height:1.55; margin-bottom:6px;}
+
+/* ---------- código de verificación en un solo campo ---------- */
+.code-single{
+  width:100%; text-align:center; font-size:24px; font-weight:700; letter-spacing:.5em;
+  background:var(--bg-input); border:1px solid var(--border); border-radius:10px;
+  color:var(--text); padding:12px 8px 12px 20px; outline:none; margin-bottom:22px;
+}
+.code-single:focus{border-color:var(--accent);}
+
+/* ---------- campos select/textarea dentro de .field ---------- */
+.field select, .field textarea{
+  width:100%; background:var(--bg-input); border:1px solid var(--border);
+  border-radius:9px; padding:10px 12px; color:var(--text); font-size:13px; font-family:inherit;
+}
+
+/* ---------- barra de filtros (formulario GET) ---------- */
+.filter-form{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+
+/* ---------- página de error ---------- */
+.error-page{
+  min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; gap:10px; padding:32px; background:var(--bg-page); color:var(--text);
+}
+.error-code{font-family:'Rajdhani',sans-serif; font-weight:700; font-size:54px; color:var(--accent-2);}
+.error-page h1{font-family:'Rajdhani',sans-serif; font-size:30px;}
+.error-page p{color:var(--text-muted);}
+
+/* ---------- textos sobre barras de progreso ---------- */
+.bar-caption{display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;}
+.bar-row{margin-bottom:14px;}
+.bar-row:last-child{margin-bottom:0;}
+.toggle-wrap .toggle{display:block;}
+.inline-form{display:inline; margin:0;}
+.row-actions .inline-form .icon-btn{cursor:pointer;}
+.section-title{font-size:15px; font-weight:700; color:var(--text);}
+.muted-note{color:var(--text-muted); font-size:12.5px;}
+.chip-note{font-size:11px; color:var(--orange); margin-left:6px;}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JASSHINE — {{ titulo }}</title>
+<link rel="icon" href="{{ url_for('static', filename='images/logo-jasshine.png') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/a11y.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/nojs.css') }}">
+</head>
+<body>
+<main class="error-page" id="main-content">
+  <img src="{{ url_for('static', filename='images/logo-jasshine.png') }}" alt="JASSHINE" width="96" height="96">
+  <p class="error-code">{{ codigo }}</p>
+  <h1>{{ titulo }}</h1>
+  <p>{{ mensaje }}</p>
+  <p><a class="btn btn-primary" href="{{ url_for('inicio.index') if usuario else url_for('public.index') }}">Volver al inicio</a></p>
+</main>
+<script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</body>
+</html>

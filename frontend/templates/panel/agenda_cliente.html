@@ -1,0 +1,28 @@
+{% extends "base_panel.html" %}
+{% from "_macros.html" import csrf %}
+{% block contenido %}
+<div class="panel-head" style="padding:0 0 16px;">
+  <h2 class="section-title">Tus citas</h2>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('servicio.index') }}">+ Agendar</a>
+</div>
+<div class="panel">
+  {% for r in reservas %}
+  <div class="appt-card">
+    <div class="appt-date"><b>{{ r.fecha_hora|dia_corto }}</b><span>{{ r.fecha_hora|mes_corto }}</span></div>
+    <div style="flex:1;">
+      <div class="person-name">{{ r.tipo.nombre }} · {{ r.fecha_hora|hora }}</div>
+      <div class="person-sub">{{ r.vehiculo.placa }} · {{ r.tipo.precio|cop }}{% if r.empleado %} · con {{ r.empleado.nombre }}{% endif %}</div>
+    </div>
+    <span class="badge {{ BADGE_RESERVA.get(r.estado, 'blue') }}">{{ r.estado }}</span>
+    {% if r.estado in ('Pendiente', 'Confirmada') and (not r.servicio or r.servicio.estado == 'En espera') %}
+    <form method="post" action="{{ url_for('agenda.cancelar', rid=r.id_reserva) }}" class="inline-form">
+      {{ csrf() }}
+      <button type="submit" class="icon-btn" title="Cancelar cita" aria-label="Cancelar cita del {{ r.fecha_hora|fecha }}" style="margin-left:10px;">{{ ICONS['trash'] }}</button>
+    </form>
+    {% endif %}
+  </div>
+  {% else %}
+  <div class="empty-row" style="padding:28px 20px; text-align:center; color:var(--text-muted);">Todavía no tienes citas agendadas. Ve a "Servicio" para reservar una.</div>
+  {% endfor %}
+</div>
+{% endblock %}

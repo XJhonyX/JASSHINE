@@ -1,0 +1,28 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="panel">
+  <div class="panel-head">
+    <h3>RESERVAS · {{ reservas|length }}</h3>
+    <div class="actions"><a class="btn btn-primary btn-sm" href="{{ url_for('agenda.nueva') }}">+ Nueva cita</a></div>
+  </div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Hora</th><th scope="col">Cliente</th><th scope="col">Placa</th><th scope="col">Servicio</th><th scope="col">Empleado</th><th scope="col">Estado</th><th scope="col"><span class="sr-only">Acciones</span></th></tr></thead>
+    <tbody>
+      {% for r in reservas %}
+      <tr>
+        <td>{{ r.fecha_hora|fecha }}</td><td>{{ r.fecha_hora|hora }}</td>
+        <td>{{ r.cliente.nombre }}</td><td>{{ r.vehiculo.placa }}</td><td>{{ r.tipo.nombre }}</td>
+        <td>{{ r.empleado.nombre if r.empleado else 'Sin asignar' }}</td>
+        <td><span class="badge {{ BADGE_RESERVA.get(r.estado, 'blue') }}">{{ r.estado }}</span></td>
+        <td><div class="row-actions">
+          <a class="icon-btn" href="{{ url_for('agenda.editar', rid=r.id_reserva) }}" title="Editar" aria-label="Editar cita de {{ r.cliente.nombre }}">✎</a>
+          <a class="icon-btn" href="{{ url_for('agenda.eliminar', rid=r.id_reserva) }}" title="Eliminar" aria-label="Eliminar cita de {{ r.cliente.nombre }}">{{ ICONS['trash'] }}</a>
+        </div></td>
+      </tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="8">No hay citas agendadas todavía.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

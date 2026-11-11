@@ -1,0 +1,71 @@
+{% extends "base_auth.html" %}
+{% from "_macros.html" import csrf, flashes %}
+{% set css = "recuperar.css" %}
+{% block titulo %}Recuperar contraseña{% endblock %}
+
+{% macro pasos(actual) %}
+<div class="steps" role="list" aria-label="Progreso: paso {{ actual }} de 3">
+  {% for n in (1, 2, 3) %}
+    <div class="step {{ 'done' if n < actual else ('active' if n == actual else '') }}" role="listitem"><span>{{ '✓' if n < actual else n }}</span></div>
+    {% if n < 3 %}<div class="step-line {{ 'done' if n < actual }}"></div>{% endif %}
+  {% endfor %}
+</div>
+{% endmacro %}
+
+{% block form %}
+<div class="form-card">
+  {% if paso == 4 %}
+    <div class="done-icon" aria-hidden="true">✓</div>
+    <h2 style="text-align:center;">¡Contraseña actualizada!</h2>
+    <p class="form-sub" style="text-align:center;">Ya puedes iniciar sesión con tu nueva contraseña.</p>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-block">Ir a iniciar sesión</a>
+
+  {% else %}
+    {{ pasos(paso) }}
+    {{ flashes() }}
+    {% if error %}<p class="flash error" role="alert">{{ error }}</p>{% endif %}
+
+    {% if paso == 1 %}
+      <h2>¿Olvidaste la contraseña?</h2>
+      <p class="form-sub">Ingresa tu correo y te enviaremos un código de verificación</p>
+      <form method="post" action="{{ url_for('auth.recuperar') }}">
+        {{ csrf() }}<input type="hidden" name="accion" value="solicitar">
+        <label for="email">Correo electrónico</label>
+        <div class="input-wrap">
+          <input type="email" id="email" name="email" placeholder="correo@ejemplo.com" autocomplete="email" required>
+          {{ ICONS['mail'] }}
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Enviar código</button>
+      </form>
+      <div class="signup-note"><a href="{{ url_for('auth.login') }}">← Volver a iniciar sesión</a></div>
+
+    {% elif paso == 2 %}
+      <h2>Revisa tu correo</h2>
+      <p class="form-sub">Enviamos un código de 6 dígitos a {{ email }}</p>
+      <form method="post" action="{{ url_for('auth.recuperar') }}">
+        {{ csrf() }}<input type="hidden" name="accion" value="verificar">
+        <label for="codigo">Código de verificación</label>
+        <input class="code-single" type="text" id="codigo" name="codigo" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="••••••" required>
+        <button type="submit" class="btn btn-primary btn-block">Verificar código</button>
+      </form>
+      <div class="signup-note">¿No te llegó? <a href="{{ url_for('auth.recuperar', reiniciar=1) }}">Pedir un código nuevo</a></div>
+
+    {% elif paso == 3 %}
+      <h2>Crea una nueva contraseña</h2>
+      <p class="form-sub">Debe tener al menos 8 caracteres</p>
+      <form method="post" action="{{ url_for('auth.recuperar') }}">
+        {{ csrf() }}<input type="hidden" name="accion" value="cambiar">
+        <label for="password">Nueva contraseña</label>
+        <div class="input-wrap">
+          <input type="password" id="password" name="password" placeholder="••••••••" minlength="8" autocomplete="new-password" required>
+        </div>
+        <label for="confirmar">Confirmar contraseña</label>
+        <div class="input-wrap">
+          <input type="password" id="confirmar" name="confirmar" placeholder="••••••••" minlength="8" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Guardar contraseña</button>
+      </form>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}

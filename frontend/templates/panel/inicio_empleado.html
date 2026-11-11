@@ -1,0 +1,43 @@
+{% extends "base_panel.html" %}
+{% block contenido %}
+<div class="stat-row">
+  <div class="stat-card"><div class="stat-label">Motos hoy</div><div class="stat-value">{{ motos }}</div></div>
+  <div class="stat-card"><div class="stat-label">Ingresos hoy</div><div class="stat-value">{{ ingresos|cop }}</div></div>
+  <div class="stat-card"><div class="stat-label">Comisión del mes</div><div class="stat-value">{{ mes|cop }}</div></div>
+</div>
+
+<div class="two-col">
+  <div class="panel">
+    <div class="panel-head"><h3>COMISIÓN POR DÍA</h3></div>
+    <div style="padding:20px;">
+      {% for d in dias %}
+      <div class="bar-row">
+        <span class="bar-caption">{{ d.etiqueta }} · {{ d.total|cop }}</span>
+        <div class="bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ d.pct }}" aria-label="Comisión {{ d.etiqueta }}"><div class="bar-fill" style="width:{{ d.pct }}%"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>INFORMACIÓN PERSONAL</h3></div>
+    <div style="padding:20px;">
+      <div class="field"><label for="info-telefono">Teléfono</label><input id="info-telefono" value="{{ emp.telefono or '' }}" readonly></div>
+      <div class="field" style="margin-bottom:0;"><label for="info-correo">Correo</label><input id="info-correo" value="{{ emp.email }}" readonly></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head"><h3>ÚLTIMOS SERVICIOS</h3></div>
+  <div class="table-scroll"><table>
+    <thead><tr><th scope="col">Hora</th><th scope="col">Placa</th><th scope="col">Servicio</th><th scope="col">Tu comisión</th></tr></thead>
+    <tbody>
+      {% for s in ultimos %}
+      <tr><td>{{ s.fecha_fin|fecha_hora }}</td><td>{{ s.vehiculo.placa }}</td><td>{{ s.tipo.nombre }}</td><td>{{ (s.comision.monto if s.comision else 0)|cop }}</td></tr>
+      {% else %}
+      <tr class="empty-row"><td colspan="4">Todavía no has finalizado lavados.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table></div>
+</div>
+{% endblock %}

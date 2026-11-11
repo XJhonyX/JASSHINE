@@ -1,0 +1,512 @@
+JASSHINE - GUIA DEL CODIGO DEL PROYECTO
+========================================
+
+Este documento describe como esta organizado el proyecto y que responsabilidad
+tiene cada parte. La aplicacion esta escrita en Python, usa Flask para atender
+las solicitudes web y MongoEngine/PyMongo para guardar documentos en MongoDB
+Atlas. Las paginas HTML se procesan en el servidor con plantillas Jinja.
+
+1. ESTRUCTURA GENERAL
+---------------------
+
+app.py
+    Punto de entrada compatible. Crea la aplicacion e inicia el servidor local.
+
+backend/
+    Codigo Python y logica de la aplicacion Flask.
+
+    __init__.py
+        Permite importar el backend como paquete Python.
+
+    jasshine/
+        Paquete principal del backend: modelos, seguridad, reglas del negocio,
+        datos iniciales, helpers, iconos y rutas HTTP agrupadas en views/.
+
+frontend/
+    templates/
+        Paginas HTML y componentes reutilizables de Jinja.
+
+    static/
+        Hojas de estilo, JavaScript e imagenes servidas por Flask.
+
+tests/
+    Pruebas automatizadas de las paginas, cuentas, permisos y reglas del
+    negocio.
+
+.env
+    Configuracion privada para el desarrollo local: URI de Atlas, nombre de
+    base y clave de sesiones. No se debe subir a Git ni compartir.
+
+instance/
+    Guarda la clave local usada para firmar las sesiones si no se configura
+    JASSHINE_SECRET. Los datos de negocio se almacenan en MongoDB Atlas.
+
+requirements.txt
+    Dependencias Python que se instalan para ejecutar la aplicacion.
+
+requirements-dev.txt
+    Dependencias adicionales para pruebas, incluyendo mongomock y pytest.
+
+iniciar.bat
+    Script de Windows para preparar el entorno e iniciar la aplicacion.
+
+.gitignore
+    Evita incluir en Git caches, entornos virtuales, la carpeta instance,
+    archivos de base de datos y el archivo privado .env.
+
+
+2. COMO SE INICIA LA APLICACION
+-------------------------------
+
+Al ejecutar app.py, Python importa create_app desde backend.jasshine y construye la
+aplicacion. La funcion app.run la sirve en http://127.0.0.1:5000. La opcion de
+depuracion se controla con la variable JASSHINE_DEBUG y esta activada por
+defecto para el desarrollo local.
+
+Antes de iniciar localmente, crea .env en la carpeta raiz del proyecto, junto
+a app.py y requirements.txt, y agrega las tres variables indicadas abajo. La
+funcion create_app carga ese archivo con python-dotenv. Tambien se pueden
+establecer las mismas variables en el sistema; si ya existen, tienen prioridad
+sobre los valores del archivo.
+
+iniciar.bat es el acceso directo para Windows. Cambia a la carpeta del
+proyecto, crea .venv si hace falta, instala requirements.txt con ese entorno y
+ejecuta app.py usando el Python de .venv. El entorno virtual aisla las
+dependencias del proyecto de las instalaciones globales de Python.
+
+requirements.txt incluye:
+    Flask
+        Framework web: rutas, solicitudes, respuestas, sesiones y plantillas.
+    MongoEngine y PyMongo
+        Mapeo de documentos y controlador para conectarse a MongoDB.
+    dnspython
+        Resolucion DNS usada por las URI mongodb+srv:// de Atlas.
+    python-dotenv
+        Lee las variables definidas en el archivo .env local.
+
+La aplicacion requiere MONGODB_URI y falla claramente si no esta definida. La
+base por defecto se llama jasshine y se puede cambiar con MONGODB_DB. La clave
+de sesion se toma de JASSHINE_SECRET o se genera localmente en
+instance/secret.key. En produccion, configura MONGODB_URI y JASSHINE_SECRET
+como secretos/variables privadas del hosting. No subas el .env al hosting ni a
+Git: normalmente el proveedor permite configurar estas variables desde su panel.
+
+Contenido esperado del .env local:
+    MONGODB_URI=mongodb+srv://USUARIO:CONTRASENA@CLUSTER.mongodb.net/?retryWrites=true&w=majority
+    MONGODB_DB=jasshine
+    JASSHINE_SECRET=una-clave-aleatoria-larga
+
+El archivo .env debe estar en la carpeta raiz del proyecto, al mismo nivel que
+app.py y requirements.txt. Reemplaza los datos de ejemplo por los de Atlas:
+MONGODB_URI usa la URI de Connect > Drivers y el usuario de Database Access;
+MONGODB_DB es el nombre de la base donde se guardaran los datos; y
+JASSHINE_SECRET debe ser una clave aleatoria privada. Si la contrasena contiene
+caracteres reservados de URI, codificalos para URL.
+
+En Atlas tambien hay que crear el usuario en Database Access y permitir la IP
+del equipo o del servidor en Network Access. Las credenciales para conectarse
+son las del usuario de base de datos, no necesariamente las de inicio de
+sesion de la cuenta Atlas.
+
+Para desarrollo local, abre una terminal en la raiz del proyecto y ejecuta
+iniciar.bat o python app.py desde el entorno virtual. Para VS Code, selecciona
+el interprete de .venv y ejecuta app.py; ambos arranques leen el mismo .env.
+Al publicar, define las tres variables en el panel de secretos del hosting.
+No subas el .env a Git ni lo uses en el hosting como sustituto de sus secretos.
+
+
+3. CONFIGURACION DE FLASK: backend/jasshine/__init__.py
+------------------------------------------------
+
+create_app es la fabrica de la aplicacion. Esta forma permite crear
+aplicaciones con configuraciones distintas; las pruebas pasan una base MongoDB
+simulada para no conectarse al Atlas real.
+
+En orden general, create_app:
+    1. Carga .env desde la carpeta raiz, sin reemplazar variables existentes.
+    2. Crea la instancia Flask y la carpeta instance si no existe.
+    3. Configura la clave secreta, la URI de MongoDB, la base y las cookies.
+    4. Aplica la configuracion adicional recibida, si la hay.
+    5. Conecta MongoEngine y registra filtros y valores globales de Jinja.
+    6. Importa y registra los blueprints de las rutas.
+    7. Comprueba el token CSRF antes de procesar cada solicitud POST.
+    8. Prepara datos globales de plantillas como el usuario, el menu y los
+       iconos.
+    9. Define paginas de error para solicitudes 400, 403 y 404.
+    10. Crea indices de MongoDB y llama a sembrar_si_vacia.
+
+La clave secreta protege las cookies de sesion. En un despliegue real se debe
+definir JASSHINE_SECRET con un valor secreto y unico y desactivar la depuracion.
+
+
+4. BASE DE DATOS: backend/jasshine/models.py
+------------------------------------
+
+db es el adaptador de conexion a MongoDB y de ciclo de escritura usado por la
+aplicacion. Los modelos heredan de MongoDocument; cada uno representa una
+coleccion, y sus IntField/StringField/etc. definen los campos del documento.
+Los documentos relacionados guardan sus identificadores y las propiedades de
+los modelos consultan la coleccion correspondiente cuando se necesita el perfil.
+
+MongoDatabase registra los modelos, establece la conexion y crea indices.
+MongoDocument asigna identificadores enteros por coleccion mediante un
+contador guardado en la coleccion interna _counters. MongoSession lleva el
+seguimiento de los documentos modificados durante una solicitud y proporciona
+operaciones add, flush, commit y rollback usadas por las rutas existentes.
+MongoSession no equivale a una transaccion atomica de MongoDB.
+
+Colecciones creadas por la aplicacion:
+    usuarios, clientes, vehiculos, empleados, tipos_servicio, reservas,
+    servicios, comisiones, recibos, negocio y preferencias.
+La coleccion _counters conserva los consecutivos internos de identificadores.
+
+Modelos:
+
+Usuario
+    Cuenta de acceso. Guarda nombre, correo unico, contrasena cifrada mediante
+    hash, rol y estado de la cuenta. Puede tener un perfil de cliente o de
+    empleado. Los roles del sistema son admin, empleado y cliente.
+
+Cliente
+    Perfil comercial vinculado a una cuenta Usuario. Incluye nombre, correo y
+    telefono. Puede tener vehiculos y reservas.
+
+Vehiculo
+    Vehiculo de un cliente, con tipo y placa unica en todo el sistema.
+
+Empleado
+    Perfil laboral vinculado a Usuario. Guarda telefono, especialidad y estado
+    de disponibilidad. La propiedad en_operacion indica si puede recibir citas.
+
+TipoServicio
+    Catalogo de lavados: nombre, descripcion, precio, duracion y si esta
+    disponible para agendar.
+
+Reserva
+    Cita de un cliente para un vehiculo y un tipo de servicio. Puede tener
+    empleado asignado y fecha/hora. Sus estados son Pendiente, Confirmada,
+    Completada y Cancelada.
+
+Servicio
+    Registro del lavado en la cola del empleado. Guarda vehiculo, empleado,
+    reserva opcional, tipo de servicio, fechas, duracion, costo y estado. El
+    flujo principal es En espera -> En curso -> Completado.
+
+Comision
+    Pago calculado para un empleado por un servicio. Guarda monto, fecha y si
+    ya fue pagada.     Un indice unico permite una comision por servicio.
+
+Recibo
+    Documento de cobro de un servicio, con fecha, total, estado y marca de
+    envio por correo.     Un indice unico permite un recibo por servicio.
+
+Negocio
+    Datos generales del lavadero y meta mensual.
+
+Preferencia
+    Preferencias booleanas de cada usuario. Una combinacion de usuario y clave
+    no puede repetirse.
+
+Los identificadores compartidos vinculan documentos entre colecciones. Los
+indices unicos de MongoDB evitan duplicar correos, placas y perfiles vinculados.
+
+
+5. AUTENTICACION Y PERMISOS: backend/jasshine/security.py
+-------------------------------------------------
+
+Este modulo concentra operaciones que deben ser coherentes en toda la
+aplicacion:
+
+    validar_password
+        Comprueba que la contrasena tenga al menos ocho caracteres.
+
+    hash_password / verificar_password
+        Generan y verifican hashes usando las funciones de seguridad de
+        Werkzeug. La contrasena original no se guarda en la base de datos.
+
+    normalizar_email / email_ocupado
+        Quita espacios, convierte el correo a minusculas y comprueba duplicados.
+
+    usuario_actual
+        Lee el identificador de usuario de la sesion y confirma que la cuenta
+        sigue activa. Si no es valida, limpia la sesion.
+
+    iniciar_sesion / cerrar_sesion
+        Crean o eliminan los datos de sesion. Al iniciar se genera tambien un
+        token CSRF.
+
+    crear_usuario / perfil_de
+        Crean una cuenta y, segun el rol, el perfil de cliente o empleado.
+
+    sincronizar_perfil
+        Actualiza el perfil asociado cuando cambian nombre o correo.
+
+    csrf_token / verificar_csrf
+        Crean y validan un token impredecible en formularios POST, para reducir
+        el riesgo de que otro sitio envie acciones no solicitadas.
+
+    login_required
+        Exige que exista una sesion autenticada.
+
+    roles_requeridos
+        Exige autenticacion y que el rol pertenezca a los roles autorizados.
+
+NAV y PANEL_CSS
+    Definen el menu y la hoja de estilo del panel segun el rol.
+
+
+6. REGLAS DEL NEGOCIO: backend/jasshine/logic.py
+----------------------------------------
+
+Este modulo evita repartir las reglas importantes entre varias rutas:
+
+    vehiculo_para
+        Normaliza la placa, devuelve el vehiculo del cliente si ya existe o lo
+        crea. Impide que dos clientes compartan una placa.
+
+    sincronizar_servicio
+        Mantiene la cola de lavados alineada con el estado de la reserva. Crea
+        o actualiza el servicio cuando la reserva tiene empleado y sigue activa;
+        retira de la cola un servicio que aun esta En espera si la cita se
+        cancela o pierde su asignacion.
+
+    puede_borrar_reserva / borrar_reserva
+        Impiden eliminar una cita cuyo lavado ya comenzo o termino y coordinan
+        la eliminacion de una cita con su servicio en espera.
+
+    iniciar_servicio
+        Solo inicia lavados En espera y no permite que el mismo empleado tenga
+        dos lavados En curso. Actualiza el estado del empleado y de la reserva.
+
+    finalizar_servicio
+        Solo finaliza lavados En curso. Guarda fecha y duracion, calcula la
+        comision (18 %), crea el recibo y marca la reserva como completada.
+        Cuando el empleado ya no tiene lavados activos, lo deja Disponible.
+
+    tiene_historial_empleado / tiene_historial_cliente
+        Permiten decidir si una cuenta se puede eliminar o si debe conservarse
+        desactivada para no perder historial.
+
+
+7. DATOS INICIALES: backend/jasshine/seed.py
+------------------------------------
+
+sembrar_si_vacia consulta si ya existe un documento de usuario. Si lo hay, no
+agrega datos otra vez. Si la coleccion esta vacia, crea:
+    - La cuenta inicial de administracion.
+    - Varios tipos de servicio con precio y duracion.
+    - Empleados de ejemplo, inicialmente sin contrasena de acceso.
+    - Los datos del negocio y la meta mensual.
+
+Los datos iniciales son utiles para probar la aplicacion. En instalaciones
+reales se debe cambiar la contrasena inicial del administrador.
+
+
+8. AYUDAS DE PRESENTACION: helpers.py E icons.py
+------------------------------------------------
+
+helpers.py:
+    cop, fecha, hora y fecha_hora convierten valores a formatos legibles para
+    las plantillas.
+
+    dia_corto, mes_corto e iniciales producen etiquetas cortas para la interfaz.
+
+    registrar_filtros publica esos formatos y las tablas de colores de estados
+    como filtros y valores globales de Jinja.
+
+    panel simplifica la carga de pantallas del panel.
+
+    campo describe un campo de formulario (nombre, etiqueta, tipo, valor,
+    opciones y validaciones).
+
+    pagina_form conserva los valores del formulario cuando ocurre un error,
+    excepto las contrasenas.
+
+    pagina_confirmar muestra una confirmacion antes de una accion destructiva.
+
+icons.py:
+    ICONS es un diccionario de iconos SVG marcado como contenido seguro con
+    Markup para que Jinja pueda insertarlos como imagen vectorial.
+
+
+9. RUTAS WEB: backend/jasshine/views/
+-----------------------------
+
+Cada modulo crea un Blueprint Flask: un grupo de rutas con un nombre y, en
+algunos casos, un prefijo de URL. views/__init__.py registra esos grupos en la
+aplicacion.
+
+public.py
+    Ruta publica /: presenta la pagina de inicio.
+
+auth.py
+    /login: verifica correo, contrasena, estado y rol antes de iniciar sesion.
+    /registro: valida los datos, crea un cliente e inicia su sesion.
+    /recuperar: flujo por pasos para solicitar codigo, verificarlo y cambiar la
+    contrasena. En esta version de demostracion el codigo se muestra en pantalla
+    en lugar de enviarse por correo.
+    /logout: cierra la sesion mediante POST.
+
+inicio.py
+    /inicio/: muestra un panel diferente segun el rol. El administrador ve
+    ingresos, lavados y comisiones; el empleado ve sus resultados; el cliente
+    ve su proxima cita y otros datos propios.
+
+agenda.py
+    /agenda/: muestra citas globales al administrador, asignadas al empleado o
+    propias del cliente.
+    Las rutas del administrador crean, editan y eliminan reservas.
+    El cliente puede cancelar solamente una reserva propia que aun no comenzo.
+    Al guardar una reserva se sincroniza el servicio de la cola.
+
+empleados.py
+    /empleados/: ofrece al cliente un directorio y al administrador la gestion
+    del equipo, busqueda, alta, edicion, cambio de contrasena y eliminacion.
+    Si un empleado tiene historial, se inactiva en vez de borrarse.
+
+usuarios.py
+    /usuarios/: permite al administrador buscar, filtrar, crear, editar e
+    inactivar/eliminar cuentas. Protege la cuenta del administrador actual y
+    conserva las cuentas que tienen historial.
+
+servicio.py
+    /servicio/: muestra el catalogo al administrador, la cola al empleado y el
+    formulario de reserva al cliente.
+    Las rutas del administrador editan el catalogo.
+    El empleado solo puede iniciar o finalizar lavados que le pertenecen.
+    El cliente puede seleccionar un servicio, vehiculo, fecha y empleado.
+
+finanzas.py
+    Agrupa cuatro blueprints:
+    /comisiones/: resumen y pago de comisiones para administracion.
+    /facturacion/: recibos e ingresos; permite pagar o anular recibos pendientes.
+    /reportes/: resumen de ingresos, meta mensual y desempeno del equipo.
+    /recibos/: historial de comisiones del empleado o recibos del cliente.
+
+configuracion.py
+    /configuracion/: permite actualizar datos del perfil, preferencias y
+    contrasena. El administrador puede editar tambien datos y meta del negocio.
+    Valida correo y placa antes de guardar.
+
+Las rutas POST que modifican datos pasan por la validacion CSRF registrada en
+create_app. Los decoradores de security.py restringen el acceso por sesion y
+rol.
+
+
+10. PAGINAS Y RECURSOS DE INTERFAZ
+----------------------------------
+
+frontend/templates/
+    index.html
+        Inicio publico.
+    base_auth.html
+        Marco comun para las paginas de autenticacion.
+    auth/login.html, auth/registro.html, auth/recuperar.html
+        Formularios de acceso, alta de cuenta y recuperacion.
+    base_panel.html
+        Marco del panel con navegacion y contenido compartido.
+    panel/
+        Paginas para inicio, agenda, empleados, usuarios, servicios,
+        configuracion, comisiones, facturacion, reportes y recibos.
+    panel/form.html y panel/confirmar.html
+        Formularios y confirmaciones reutilizados por varias funciones.
+    _macros.html
+        Fragmentos reutilizables de Jinja.
+    error.html
+        Presentacion de errores HTTP controlados.
+
+frontend/static/css/
+    index.css, login.css, registro.css y recuperar.css
+        Estilos de inicio y autenticacion.
+    panel-administrador.css, panel-empleado.css y panel-cliente.css
+        Apariencia especifica de cada rol.
+    responsive.css
+        Ajustes de diseno para distintos tamanos de pantalla.
+    nojs.css
+        Comportamiento visual que no depende de JavaScript.
+    crud-ui.css
+        Estilos compartidos para formularios y operaciones CRUD.
+    a11y.css
+        Reglas relacionadas con accesibilidad.
+
+frontend/static/images/
+    logo-jasshine.png y auth-bg.jpg son recursos visuales.
+
+Las plantillas reciben datos desde las rutas y generan HTML en el servidor. Los
+archivos CSS definen la presentacion; las imagenes son estaticas. La carpeta
+static no contiene logica de base de datos.
+
+
+11. PRUEBAS AUTOMATIZADAS: tests/
+---------------------------------
+
+conftest.py
+    Prepara una aplicacion Flask para las pruebas, con una base MongoDB simulada
+    y aislada por prueba. Incluye utilidades para simular navegadores y agregar
+    automaticamente el token CSRF a formularios POST. Tambien define datos de
+    prueba y la sesion de administrador.
+
+test_app.py
+    Comprueba paginas publicas, acceso y permisos, flujo de citas, colas,
+    lavados, comisiones, recibos, configuracion y reportes.
+
+test_cuentas.py
+    Comprueba registro, inicio y cierre de sesion, privacidad de cuentas,
+    recuperacion de contrasena, proteccion CSRF y permisos por rol.
+
+test_negocio.py
+    Comprueba operaciones CRUD y reglas de negocio para usuarios, empleados,
+    catalogo, reservas, lavados, comisiones, recibos y configuracion.
+
+test_mongodb.py
+    Comprueba que la aplicacion falla con un mensaje claro cuando no se ha
+    configurado MONGODB_URI.
+
+Las pruebas usan mongomock y no acceden a MongoDB Atlas. pytest es el ejecutor
+de esas pruebas. Para instalar todas las dependencias de desarrollo se usa
+pip install -r requirements-dev.txt; luego se ejecuta python -m pytest -q.
+
+
+12. FLUJO COMPLETO DE UN SERVICIO
+---------------------------------
+
+    1. El cliente inicia sesion y envia una solicitud de reserva.
+    2. servicio.py valida servicio, placa, fecha y empleado.
+    3. logic.py obtiene o registra el vehiculo y crea la reserva.
+    4. Si hay empleado asignado, sincronizar_servicio puede crear su entrada
+       en la cola.
+    5. El empleado inicia el lavado: pasa de En espera a En curso.
+    6. El empleado finaliza el lavado: se guarda el tiempo, se crea la comision
+       del 18 % y se genera el recibo.
+    7. El dashboard, la facturacion, los recibos y los reportes consultan esos
+       registros de la base de datos.
+
+
+13. CONCEPTOS Y BUENAS PRACTICAS PRESENTES
+------------------------------------------
+
+    - Separacion por responsabilidades: modelos, seguridad, logica y rutas no
+      estan concentrados en un solo archivo.
+    - Blueprints: las URL se agrupan por area de funcionalidad.
+    - ODM y referencias: los modelos consultan documentos en colecciones
+      relacionadas mediante identificadores enteros.
+    - Hash de contrasenas: las contrasenas no se guardan en texto plano.
+    - Control de acceso: sesion autenticada y comprobacion del rol.
+    - CSRF: token validado en los formularios POST.
+    - Validacion: las rutas comprueban datos recibidos antes de guardar.
+    - Pruebas: los flujos principales se pueden comprobar con pytest.
+    - Configuracion externa: para desarrollo local, la URI de Atlas y las claves
+      se leen de .env; para publicar, se configuran como variables privadas en
+      el hosting.
+
+Notas para un despliegue real:
+    - Cambiar la contrasena inicial del administrador.
+    - Definir JASSHINE_SECRET y no compartirla.
+    - Desactivar el modo debug y servir mediante HTTPS y un servidor WSGI.
+    - El codigo de recuperacion se muestra en pantalla en este prototipo; no
+      sustituye un servicio real de correo.
+    - MongoDB crea colecciones cuando se guardan documentos; los indices se
+      preparan al iniciar. Los datos de una base antigua local no se copian
+      automaticamente a Atlas.
+
+FIN DE LA GUIA

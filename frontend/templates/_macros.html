@@ -1,0 +1,14 @@
+{# Piezas reutilizables de las plantillas #}
+{% macro csrf() -%}
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{%- endmacro %}
+
+{% macro flashes() -%}
+{% for cat, msg in get_flashed_messages(with_categories=true) %}
+<div class="flash {{ cat }}" role="{{ 'alert' if cat == 'error' else 'status' }}">{{ msg }}</div>
+{% endfor %}
+{%- endmacro %}
+
+{% macro badge(color, texto) -%}
+<span class="badge {{ color }}">{{ texto }}</span>
+{%- endmacro %}
